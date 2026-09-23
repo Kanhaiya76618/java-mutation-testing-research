@@ -1,0 +1,40 @@
+{
+  "mutator_groups": {
+    "DEFAULTS": [
+      "CONDITIONALS_BOUNDARY",
+      "INCREMENTS",
+      "INVERT_NEGS",
+      "MATH",
+      "NEGATE_CONDITIONALS",
+      "RETURN_VALS",
+      "VOID_METHOD_CALLS"
+    ],
+    "STRONGER": [
+      "CONDITIONALS_BOUNDARY",
+      "INCREMENTS",
+      "INVERT_NEGS",
+      "MATH",
+      "NEGATE_CONDITIONALS",
+      "RETURN_VALS",
+      "VOID_METHOD_CALLS",
+      "EMPTY_RETURNS",
+      "FALSE_RETURNS",
+      "TRUE_RETURNS",
+      "NULL_RETURNS",
+      "PRIMITIVE_RETURNS"
+    ],
+    "CONDITIONALS_ONLY": [
+      "CONDITIONALS_BOUNDARY",
+      "NEGATE_CONDITIONALS"
+    ],
+    "MATH_ONLY": [
+      "MATH",
+      "INCREMENTS",
+      "INVERT_NEGS"
+    ],
+    "CALLS_AND_RETURNS": [
+      "VOID_METHOD_CALLS",
+      "RETURN_VALS"
+    ]
+  }
+}

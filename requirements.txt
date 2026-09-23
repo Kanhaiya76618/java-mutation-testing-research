@@ -1,0 +1,13 @@
+# Statistical analysis and data processing
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+pingouin>=0.5.3
+statsmodels>=0.14.0
+
+# XML and parsing
+lxml>=4.9.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0

@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Java / Maven / Gradle
+target/
+build/
+.gradle/
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.iml
+
+# Benchmark clones & large temporary checkouts
+scratch_checkouts/
+defects4j/
+benchmarks/
+data/raw/
+!data/raw/.gitkeep

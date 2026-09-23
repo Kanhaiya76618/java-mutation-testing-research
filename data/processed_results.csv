@@ -1,0 +1,1 @@
+bug_id,project,suite_type,test_count,line_coverage,branch_coverage,total_mutants,killed_mutants,survived_mutants,timed_out,no_coverage,mutation_score,cond_boundary_score,negate_cond_score,math_score,void_call_score,invert_negs_score,real_bug_detected
