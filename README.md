@@ -3,6 +3,8 @@
 This repository hosts the replication package, experimental testbed, and daily research logs for our empirical study:
 **"When Does Raising Mutation Score Actually Raise Real-Fault Detection? An Empirical Investigation on Java Ecosystems"**
 
+🔗 **GitHub Repository:** [https://github.com/Kanhaiya76618/java-mutation-testing-research](https://github.com/Kanhaiya76618/java-mutation-testing-research)
+
 ## Research Objectives
 Building upon recent findings by Zhao, Zhou & Cohen (PACMSE/ISSTA 2026) and industrial mutation-guided testing (Meta FSE 2025), this study investigates the conditions under which mutation score increases predict real regression-fault detection:
 - **RQ1:** Across historical bug fixes, does $\Delta \text{MutationScore}$ correlate with real-fault detection when controlling for test-suite size?
