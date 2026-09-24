@@ -1,1 +1,3 @@
 bug_id,project,suite_type,test_count,line_coverage,branch_coverage,total_mutants,killed_mutants,survived_mutants,timed_out,no_coverage,mutation_score,cond_boundary_score,negate_cond_score,math_score,void_call_score,invert_negs_score,real_bug_detected
+LANG-1834,commons-lang,augmented,683,96.3,0.0,350,280,59,15,11,80.00,16.67,80.36,83.56,60.00,75.00,1
+LANG-1834,commons-lang,base,683,96.3,0.0,350,280,59,15,11,80.00,16.67,80.36,83.56,60.00,75.00,0

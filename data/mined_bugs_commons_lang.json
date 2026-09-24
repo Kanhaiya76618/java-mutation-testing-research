@@ -1,0 +1,88 @@
+[
+  {
+    "commit_hash": "9a92df9fa33d2f84a7c2037c52ca37e9cb647be1",
+    "parent_hash": "963c337d772ec4e27a4501a9dda1ffd860c59d7e",
+    "author_date": "2026-09-22",
+    "message": "Fix NumberUtils.createNumber() and isCreatable() for positive Long literals with explicit '+' sign (#1796)",
+    "prod_files": [
+      "src/main/java/org/apache/commons/lang3/math/NumberUtils.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/lang3/math/NumberUtilsTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.lang3.math.NumberUtils"
+    ],
+    "target_tests": [
+      "org.apache.commons.lang3.math.NumberUtilsTest"
+    ],
+    "added_test_methods": [
+      "testCreateNumberFailure_9"
+    ]
+  },
+  {
+    "commit_hash": "82483775157159a8edcc9220498f034fa1621611",
+    "parent_hash": "a1a3bd056e556e7cce7c34bae905ed7d047c79eb",
+    "author_date": "2026-09-19",
+    "message": "Fix ConstructorUtils.getMatchingAccessibleConstructor on non-public classes (#1793)",
+    "prod_files": [
+      "src/main/java/org/apache/commons/lang3/reflect/ConstructorUtils.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/lang3/reflect/ConstructorUtilsTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.lang3.reflect.ConstructorUtils"
+    ],
+    "target_tests": [
+      "org.apache.commons.lang3.reflect.ConstructorUtilsTest"
+    ],
+    "added_test_methods": [
+      "testGetMatchingAccessibleConstructorOnNonPublicClass",
+      "testInvokeConstructorOnNonPublicClass",
+      "testInvokeExactConstructorOnNonPublicClass"
+    ]
+  },
+  {
+    "commit_hash": "55dcbc4bb1449aa9f7c6ee422cc22b465a35fa2f",
+    "parent_hash": "d86ec875bdc7676d76c162d393e81db7dee01f2d",
+    "author_date": "2026-09-19",
+    "message": "Fix mutable time zone keys in the FastDateFormat cache",
+    "prod_files": [
+      "src/main/java/org/apache/commons/lang3/time/AbstractFormatCache.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/lang3/time/FastDateFormatTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.lang3.time.AbstractFormatCache"
+    ],
+    "target_tests": [
+      "org.apache.commons.lang3.time.FastDateFormatTest"
+    ],
+    "added_test_methods": [
+      "testTimeZoneCacheKeyIsCopied"
+    ]
+  },
+  {
+    "commit_hash": "e992a498d711fc4302d5ad89e80511db41db2f11",
+    "parent_hash": "8c730822620f2e5a9e7e64443483127f438e51b7",
+    "author_date": "2026-09-19",
+    "message": "LANG-1834 Fix Fraction reduction for Integer.MIN_VALUE (#1794)",
+    "prod_files": [
+      "src/main/java/org/apache/commons/lang3/math/Fraction.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/lang3/math/FractionTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.lang3.math.Fraction"
+    ],
+    "target_tests": [
+      "org.apache.commons.lang3.math.FractionTest"
+    ],
+    "added_test_methods": [
+      "testReducedFactoryIntegerMinValue"
+    ]
+  }
+]
