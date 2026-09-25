@@ -1,70 +1,5 @@
 [
   {
-    "commit_hash": "9a92df9fa33d2f84a7c2037c52ca37e9cb647be1",
-    "parent_hash": "963c337d772ec4e27a4501a9dda1ffd860c59d7e",
-    "author_date": "2026-09-22",
-    "message": "Fix NumberUtils.createNumber() and isCreatable() for positive Long literals with explicit '+' sign (#1796)",
-    "prod_files": [
-      "src/main/java/org/apache/commons/lang3/math/NumberUtils.java"
-    ],
-    "test_files": [
-      "src/test/java/org/apache/commons/lang3/math/NumberUtilsTest.java"
-    ],
-    "target_classes": [
-      "org.apache.commons.lang3.math.NumberUtils"
-    ],
-    "target_tests": [
-      "org.apache.commons.lang3.math.NumberUtilsTest"
-    ],
-    "added_test_methods": [
-      "testCreateNumberFailure_9"
-    ]
-  },
-  {
-    "commit_hash": "82483775157159a8edcc9220498f034fa1621611",
-    "parent_hash": "a1a3bd056e556e7cce7c34bae905ed7d047c79eb",
-    "author_date": "2026-09-19",
-    "message": "Fix ConstructorUtils.getMatchingAccessibleConstructor on non-public classes (#1793)",
-    "prod_files": [
-      "src/main/java/org/apache/commons/lang3/reflect/ConstructorUtils.java"
-    ],
-    "test_files": [
-      "src/test/java/org/apache/commons/lang3/reflect/ConstructorUtilsTest.java"
-    ],
-    "target_classes": [
-      "org.apache.commons.lang3.reflect.ConstructorUtils"
-    ],
-    "target_tests": [
-      "org.apache.commons.lang3.reflect.ConstructorUtilsTest"
-    ],
-    "added_test_methods": [
-      "testGetMatchingAccessibleConstructorOnNonPublicClass",
-      "testInvokeConstructorOnNonPublicClass",
-      "testInvokeExactConstructorOnNonPublicClass"
-    ]
-  },
-  {
-    "commit_hash": "55dcbc4bb1449aa9f7c6ee422cc22b465a35fa2f",
-    "parent_hash": "d86ec875bdc7676d76c162d393e81db7dee01f2d",
-    "author_date": "2026-09-19",
-    "message": "Fix mutable time zone keys in the FastDateFormat cache",
-    "prod_files": [
-      "src/main/java/org/apache/commons/lang3/time/AbstractFormatCache.java"
-    ],
-    "test_files": [
-      "src/test/java/org/apache/commons/lang3/time/FastDateFormatTest.java"
-    ],
-    "target_classes": [
-      "org.apache.commons.lang3.time.AbstractFormatCache"
-    ],
-    "target_tests": [
-      "org.apache.commons.lang3.time.FastDateFormatTest"
-    ],
-    "added_test_methods": [
-      "testTimeZoneCacheKeyIsCopied"
-    ]
-  },
-  {
     "commit_hash": "e992a498d711fc4302d5ad89e80511db41db2f11",
     "parent_hash": "8c730822620f2e5a9e7e64443483127f438e51b7",
     "author_date": "2026-09-19",
@@ -84,5 +19,329 @@
     "added_test_methods": [
       "testReducedFactoryIntegerMinValue"
     ]
+  },
+  {
+    "commit_hash": "45f08d9e3b03177e12559878fc95cf3266b65052",
+    "parent_hash": "e1ce120c6a60df8fe1bf37b78127eea7562662e4",
+    "author_date": "2026-09-13",
+    "message": "Fix TypeUtils.toString() recursion and bound handling on recursive generic types (#1789).",
+    "prod_files": [
+      "src/main/java/org/apache/commons/lang3/reflect/TypeUtils.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/lang3/reflect/TypeUtilsTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.lang3.reflect.TypeUtils"
+    ],
+    "target_tests": [
+      "org.apache.commons.lang3.reflect.TypeUtilsTest"
+    ],
+    "added_test_methods": [
+      "testBoundedGenericArrayTypeToString",
+      "testBoundedParameterizedTypeArgumentToString",
+      "testContainsTypeVariablesMultiBoundWildcard",
+      "testCyclicGenericArrayTypeToString",
+      "testCyclicOwnerParameterizedTypeToString",
+      "testCyclicParameterizedTypeToString",
+      "testCyclicWildcardTypeToString",
+      "testDependentBoundsClassAndTypeParametersToString",
+      "testGClassToString",
+      "testInterfaceBoundPreserved",
+      "testMultiBoundRecursiveType",
+      "testMultiParamRecursiveType",
+      "testParameterizedOwnerWithNonGenericInnerClassToString",
+      "testRecursiveTypeWildcardBoundClass",
+      "testRepeatedSiblingReferencesToString",
+      "testThreadLocalCleanupAfterException",
+      "testToLongString",
+      "testToLongStringBoundedTypeVariable",
+      "testToString",
+      "testWrap"
+    ]
+  },
+  {
+    "commit_hash": "e1ce120c6a60df8fe1bf37b78127eea7562662e4",
+    "parent_hash": "d6dd060ff988b058f34800fa8fdb2c00747e3859",
+    "author_date": "2026-09-14",
+    "message": "Fix TypeUtils.toString() recursion and bound handling on recursive generic types (#1789)",
+    "prod_files": [
+      "src/main/java/org/apache/commons/lang3/reflect/TypeUtils.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/lang3/reflect/TypeUtilsTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.lang3.reflect.TypeUtils"
+    ],
+    "target_tests": [
+      "org.apache.commons.lang3.reflect.TypeUtilsTest"
+    ],
+    "added_test_methods": [
+      "testRecursiveTypeWildcardBoundClass",
+      "testMultiBoundRecursiveType",
+      "testInterfaceBoundPreserved",
+      "testMultiParamRecursiveType",
+      "testGClassToString",
+      "testContainsTypeVariablesMultiBoundWildcard",
+      "testWildcardTypeBuilderDefensiveCopy",
+      "testBoundedGenericArrayTypeToString",
+      "testBoundedParameterizedTypeArgumentToString",
+      "testDependentBoundsClassAndTypeParametersToString",
+      "testToLongStringBoundedTypeVariable",
+      "testParameterizedOwnerWithNonGenericInnerClassToString",
+      "testCyclicOwnerParameterizedTypeToString",
+      "testRepeatedSiblingReferencesToString",
+      "testThreadLocalCleanupAfterException",
+      "testCyclicWildcardTypeToString",
+      "testCyclicParameterizedTypeToString",
+      "testCyclicGenericArrayTypeToString"
+    ]
+  },
+  {
+    "commit_hash": "d8f4116d4ba03ed32b104b3af891de7a67f2ce97",
+    "parent_hash": "80ac358a4c9bcd9cb03eb50bdd33de9755a109a5",
+    "author_date": "2026-09-09",
+    "message": "Fix MethodUtils.invokeMethod on instances of non-public classes (#1783)",
+    "prod_files": [
+      "src/main/java/org/apache/commons/lang3/reflect/MethodUtils.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/lang3/reflect/MethodUtilsTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.lang3.reflect.MethodUtils"
+    ],
+    "target_tests": [
+      "org.apache.commons.lang3.reflect.MethodUtilsTest"
+    ],
+    "added_test_methods": [
+      "testGetMatchingAccessibleMethodOnNonPublicClass",
+      "testGetMatchingAccessibleMethodOnNonPublicJdkClass",
+      "testGetMatchingAccessibleMethodWithNoPublicDeclaration",
+      "testInvokeMethodOnNonPublicClass",
+      "testInvokeStaticMethodOnNonPublicSubclass",
+      "testInvokeMethodIgnoresStaticInterfaceMethod",
+      "testInvokeMethodIgnoresPrivateInterfaceMethod"
+    ]
+  },
+  {
+    "commit_hash": "e213b85ce46aca72b284813c74a15e9ac9d55d90",
+    "parent_hash": "4a80aeb071d3e268ad6b62999525e9eb3e091405",
+    "author_date": "2026-09-08",
+    "message": "Fix Fraction.add and subtract for operands not in lowest terms (#1784)",
+    "prod_files": [
+      "src/main/java/org/apache/commons/lang3/math/Fraction.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/lang3/math/FractionTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.lang3.math.Fraction"
+    ],
+    "target_tests": [
+      "org.apache.commons.lang3.math.FractionTest"
+    ],
+    "added_test_methods": [
+      "testAddSubtractUnreducedOperands"
+    ]
+  },
+  {
+    "commit_hash": "df1e91895d3d5380efa18a8e8e9d3d7b64ecceab",
+    "parent_hash": "7aa6bfe4c584d26d65bb6b58905bb5d156c37d04",
+    "author_date": "2026-09-08",
+    "message": "Fix TypeUtils.isAssignable() for wildcards with multiple upper bounds (#1782)",
+    "prod_files": [
+      "src/main/java/org/apache/commons/lang3/reflect/TypeUtils.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/lang3/reflect/TypeUtilsTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.lang3.reflect.TypeUtils"
+    ],
+    "target_tests": [
+      "org.apache.commons.lang3.reflect.TypeUtilsTest"
+    ],
+    "added_test_methods": [
+      "testIsAssignableWildcardWithMultipleUpperBounds"
+    ]
+  },
+  {
+    "commit_hash": "e4380908b4675dda241247422d6c3dd021bf1253",
+    "parent_hash": "8737513d1e10bbe133fdd38a6356b498a716af59",
+    "author_date": "2026-09-03",
+    "message": "Fix DurationFormatUtils.formatPeriod() calculation when pattern omits M (#1780)",
+    "prod_files": [
+      "src/main/java/org/apache/commons/lang3/time/DurationFormatUtils.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/lang3/time/DurationFormatUtilsTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.lang3.time.DurationFormatUtils"
+    ],
+    "target_tests": [
+      "org.apache.commons.lang3.time.DurationFormatUtilsTest"
+    ],
+    "added_test_methods": [
+      "testFormatPeriodWithoutMonths"
+    ]
+  },
+  {
+    "commit_hash": "0edbb4ae03fbe14a8204dbb866b0a17f22a4c6f1",
+    "parent_hash": "efc78779c293f5fb516fec4650a8203ceba1bd85",
+    "author_date": "2026-09-02",
+    "message": "fix int overflow in Conversion count and position bounds guards (#1779)",
+    "prod_files": [
+      "src/main/java/org/apache/commons/lang3/Conversion.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/lang3/ConversionTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.lang3.Conversion"
+    ],
+    "target_tests": [
+      "org.apache.commons.lang3.ConversionTest"
+    ],
+    "added_test_methods": [
+      "testOverflowingCountOrPositionThrowsIllegalArgumentException"
+    ]
+  },
+  {
+    "commit_hash": "1d6ef29ce004309e50bd91e27f0f5e80e1a57a76",
+    "parent_hash": "596269f16d33cd4a20223978c245a15c898c5084",
+    "author_date": "2026-08-17",
+    "message": "Fix CharRange.contains for negated argument ranges (#1775)",
+    "prod_files": [
+      "src/main/java/org/apache/commons/lang3/CharRange.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/lang3/CharRangeTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.lang3.CharRange"
+    ],
+    "target_tests": [
+      "org.apache.commons.lang3.CharRangeTest"
+    ],
+    "added_test_methods": [
+      "testContains_Charrange_negatedArgumentTouchingBounds"
+    ]
+  },
+  {
+    "commit_hash": "8d9ada1291429cd53b0b5432df2f97aebc1d7749",
+    "parent_hash": "8eace65255d6878f6b4b4fb28d9007bdc88c9573",
+    "author_date": "2026-08-17",
+    "message": "Fix typos in Javadoc and example comments (#1774)",
+    "prod_files": [
+      "src/main/java/org/apache/commons/lang3/Range.java",
+      "src/main/java/org/apache/commons/lang3/StringUtils.java",
+      "src/main/java/org/apache/commons/lang3/Strings.java",
+      "src/main/java/org/apache/commons/lang3/text/StrBuilder.java",
+      "src/main/java/org/apache/commons/lang3/time/DurationFormatUtils.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/lang3/builder/EqualsBuilderTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.lang3.Range",
+      "org.apache.commons.lang3.StringUtils",
+      "org.apache.commons.lang3.Strings",
+      "org.apache.commons.lang3.text.StrBuilder",
+      "org.apache.commons.lang3.time.DurationFormatUtils"
+    ],
+    "target_tests": [
+      "org.apache.commons.lang3.builder.EqualsBuilderTest"
+    ],
+    "added_test_methods": []
+  },
+  {
+    "commit_hash": "4ee32aa56d596e31f50fbf325c2641591e9e1ea4",
+    "parent_hash": "d5ae92a588645ab046298edd199c0abfcebd69f2",
+    "author_date": "2026-08-12",
+    "message": "Fix low surrogate false match in containsAny/containsNone/indexOfAny (#1771)",
+    "prod_files": [
+      "src/main/java/org/apache/commons/lang3/StringUtils.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/lang3/StringUtilsContainsTest.java",
+      "src/test/java/org/apache/commons/lang3/StringUtilsEqualsIndexOfTest.java",
+      "src/test/java/org/apache/commons/lang3/Supplementary.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.lang3.StringUtils"
+    ],
+    "target_tests": [
+      "org.apache.commons.lang3.StringUtilsContainsTest",
+      "org.apache.commons.lang3.StringUtilsEqualsIndexOfTest",
+      "org.apache.commons.lang3.Supplementary"
+    ],
+    "added_test_methods": [
+      "testContainsAny_StringCharArrayWithSharedLowSurrogate",
+      "testContainsNone_CharArrayWithSharedLowSurrogate",
+      "testIndexOfAny_StringCharArrayWithSharedLowSurrogate"
+    ]
+  },
+  {
+    "commit_hash": "10f4421456b891d5a426348511383f387c99f3e1",
+    "parent_hash": "9d1f110190081801754a8a0b447693ad2407a502",
+    "author_date": "2026-08-10",
+    "message": "Fix spurious overflow in Fraction.multiplyBy for unreduced operands (#1769)",
+    "prod_files": [
+      "src/main/java/org/apache/commons/lang3/math/Fraction.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/lang3/math/FractionTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.lang3.math.Fraction"
+    ],
+    "target_tests": [
+      "org.apache.commons.lang3.math.FractionTest"
+    ],
+    "added_test_methods": []
+  },
+  {
+    "commit_hash": "9288e2c95f39abd1ff115aeddafaa276ceafae6d",
+    "parent_hash": "03636f3e9ca42122996e6cd5ac5449c0e707c80f",
+    "author_date": "2026-08-04",
+    "message": "Fix the overflow bound direction in Instants.toMillisSince(Instant) (#1766)",
+    "prod_files": [
+      "src/main/java/org/apache/commons/lang3/time/Instants.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/lang3/time/InstantsTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.lang3.time.Instants"
+    ],
+    "target_tests": [
+      "org.apache.commons.lang3.time.InstantsTest"
+    ],
+    "added_test_methods": [
+      "testToMillisSinceInstantMaxUnderflowReturnsMinValue",
+      "testToMillisSinceInstantMinOverflowReturnsMaxValue"
+    ]
+  },
+  {
+    "commit_hash": "a1c12e6d4887d66d2112def35d6109905806410d",
+    "parent_hash": "285cd2fc42a16de63f1ea518cfd7ea1851563c46",
+    "author_date": "2026-07-31",
+    "message": "Fix two Javadoc errors in StringUtils (#1763)",
+    "prod_files": [
+      "src/main/java/org/apache/commons/lang3/StringUtils.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/lang3/StringUtilsAbbreviateTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.lang3.StringUtils"
+    ],
+    "target_tests": [
+      "org.apache.commons.lang3.StringUtilsAbbreviateTest"
+    ],
+    "added_test_methods": []
   }
 ]

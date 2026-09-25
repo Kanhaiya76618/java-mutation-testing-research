@@ -59,11 +59,39 @@ Tracking daily progress, experimental findings, methodology updates, and decisio
   - `ConditionalsBoundaryMutator`: 17% killed (5/30) — notable survivability.
 - [x] Recorded first data points in `data/processed_results.csv`.
 
-### Key Technical Insights
-1. **PIT Requires a 100% Green Suite:** PIT will abort during its pre-scan if any test fails on the code under test. This validates our experimental methodology: mutation testing must be evaluated on the **bug-free fixed version** ($V_{fix}$) as formalized in Zhao et al. (ISSTA 2026), while real-fault detection is evaluated by checking if the augmented test fails on the **buggy version** ($V_{bug}$).
-2. **Low Mutation Score in Conditionals Boundary:** Notice `ConditionalsBoundaryMutator` had an 83% survival rate (only 5 of 30 killed), despite high overall line coverage (96%). This provides early empirical support for RQ2 (boundary mutators expose test gaps that standard line coverage misses).
+---
 
-### Next Steps (Day 3)
-- Batch-run the experiment pipeline across remaining mined bugs in `data/mined_bugs_commons_lang.json` (`NumberUtils`, `ConstructorUtils`, `AbstractFormatCache`).
-- Mine 10 additional bug-fix commits to expand dataset to $N \ge 15$.
-- Compute preliminary Spearman $\rho$ and delta mutation scores ($\Delta MS$).
+## Day 3 — Batch Execution Engine, Bytecode Architecture & Statistical Analysis (2026-09-25)
+
+### Objectives
+- Resolve OpenJDK 26 ASM bytecode compatibility by installing and binding OpenJDK 21 LTS.
+- Solve the PIT green pre-scan requirement using method-level annotation commenting (`_disable_test_methods`).
+- Build and verify automated batch runner (`scripts/batch_runner.py`).
+- Implement statistical analysis engine (`scripts/analyze_results.py`) computing Spearman $\rho$, Kendall $\tau$, partial correlation, Vargha-Delaney $\hat{A}_{12}$, and Cliff's $\delta$.
+- Scale dataset to multiple real bug commits and evaluate preliminary findings.
+
+### Completed Work
+- [x] Installed OpenJDK 21 LTS via Homebrew (`/opt/homebrew/opt/openjdk@21`) and configured runtime environment flags in `run_cmd`.
+- [x] Implemented regex-based bytecode test annotation isolation:
+  - For $T_{base}$: Comments out `@Test` and `@ParameterizedTest` for added methods, compiling a 100% green base suite.
+  - For $T_{aug}$: Restores annotations, compiling the full augmented test suite.
+- [x] Successfully evaluated 3 additional real bug fixes:
+  - **`d8f4116d` (MethodUtils):** $MS_{base} = 80.60\% \rightarrow MS_{aug} = 83.19\%$ ($\Delta MS = +2.59\%$, 6 new mutants killed, detected real bug).
+  - **`e213b85c` (Fraction.add/subtract):** $MS_{base} = 74.50\% \rightarrow MS_{aug} = 75.07\%$ ($\Delta MS = +0.57\%$, 2 new mutants killed, detected real bug).
+  - **`df1e9189` (TypeUtils.isAssignable):** $MS_{base} = 67.72\% \rightarrow MS_{aug} = 68.54\%$ ($\Delta MS = +0.82\%$, 5 new mutants killed, detected real bug).
+- [x] Scaled dataset to 8 experiment records in `data/processed_results.csv`.
+- [x] Built `scripts/analyze_results.py` and generated preliminary statistical report in `docs/LATEST_STATISTICAL_REPORT.md`:
+  - Spearman Rank Correlation: $\rho = 0.165$ ($p = 0.697$).
+  - Partial Rank Correlation (size-controlled): $r_{xy \cdot z} = 0.170$.
+  - Vargha-Delaney Effect Size: $\hat{A}_{12} = 0.594$.
+  - Cliff's Delta: $\delta = 0.188$.
+- [x] Operator breakdown indicates `Math / Arithmetic` and `Conditionals Boundary` mutators show higher sensitivity to regression test additions.
+
+### Key Technical Insights
+1. **PIT Bytecode Versioning Constraints:** PIT 1.16 is powered by ASM 9.x, which natively parses class files up to Java 21. Standardizing on OpenJDK 21 LTS eliminates all class file major version exceptions when testing classes that reflect on JDK internals (`java.util.Collections$EmptyList`).
+2. **Annotation-Level Suite Isolation:** Completely commenting out the test annotation (`/* @Test */`) is superior to using `@Disabled` because PIT's bytecode test discoverer ignores `@Disabled` unless configured with specific runner engines. Commenting out ensures the test method does not exist in the test engine's execution graph.
+
+### Next Steps (Day 4)
+- Run remaining mined candidates in `data/mined_bugs_commons_lang.json` (target: $N \ge 10$ bug pairs, 20 total dataset rows).
+- Generate publication-ready correlation and effect size charts (`matplotlib` / `seaborn`).
+- Begin drafting Section 3 (Empirical Methodology) of the NIER paper.

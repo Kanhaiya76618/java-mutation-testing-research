@@ -1,3 +1,9 @@
 bug_id,project,suite_type,test_count,line_coverage,branch_coverage,total_mutants,killed_mutants,survived_mutants,timed_out,no_coverage,mutation_score,cond_boundary_score,negate_cond_score,math_score,void_call_score,invert_negs_score,real_bug_detected
 LANG-1834,commons-lang,augmented,683,96.3,0.0,350,280,59,15,11,80.00,16.67,80.36,83.56,60.00,75.00,1
 LANG-1834,commons-lang,base,683,96.3,0.0,350,280,59,15,11,80.00,16.67,80.36,83.56,60.00,75.00,0
+d8f4116d,commons-lang,base,0,0.0,0.0,232,187,41,0,4,80.6,90.9090909090909,0.0,90.9090909090909,100.0,0.0,0
+d8f4116d,commons-lang,augmented,0,0.0,0.0,232,193,37,0,2,83.19,90.9090909090909,0.0,90.9090909090909,100.0,0.0,1
+e213b85c,commons-lang,base,0,0.0,0.0,349,260,61,17,11,74.5,16.666666666666664,0.0,80.55555555555556,60.0,75.0,0
+e213b85c,commons-lang,augmented,0,0.0,0.0,349,262,59,17,11,75.07,16.666666666666664,0.0,83.33333333333334,60.0,75.0,1
+df1e9189,commons-lang,base,0,0.0,0.0,604,409,120,1,74,67.72,75.0,0.0,0.0,25.0,0.0,0
+df1e9189,commons-lang,augmented,0,0.0,0.0,604,414,117,1,72,68.54,75.0,0.0,0.0,25.0,0.0,1
