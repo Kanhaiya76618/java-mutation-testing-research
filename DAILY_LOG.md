@@ -97,6 +97,7 @@ Tracking daily progress, experimental findings, methodology updates, and decisio
 - **Batch 2:** Mine and evaluate core string and timestamp modules (`StringUtils`, `Instants`).
 - **Batch 3:** Build automated publication plotting pipeline (`scripts/plot_results.py`) and generate figures for RQ1 and RQ2.
 - **Batch 4:** Draft Section 3 (Empirical Study Design & Methodology) for our NIER paper submission.
+- **Batch 5:** Draft Section 4 (Empirical Results & Analysis) answering RQ1, RQ2, and RQ3.
 
 ### Completed Work
 - [x] **Executed Batch 1:**
@@ -122,8 +123,10 @@ Tracking daily progress, experimental findings, methodology updates, and decisio
   - Committed & Pushed: `e5c133c`.
 - [x] **Executed Batch 4 (Paper Methodology):**
   - Drafted comprehensive methodology section in `docs/PAPER_DRAFT_METHODOLOGY.md` covering inclusion criteria, annotation isolation, mutator operator taxonomy, and non-parametric statistical metrics.
+  - Committed & Pushed: `a95f9e2`.
+- [x] **Executed Batch 5 (Paper Results & Discussion):**
+  - Drafted Section 4 in `docs/PAPER_DRAFT_RESULTS.md` with detailed statistical analysis tables, operator kill rate decompositions, and practical CI/CD pruning trade-offs.
 
 ### Next Steps (Day 5)
-- Draft Section 4 (Empirical Results & Discussion) citing specific table values and Figure 1/2.
-- Draft Section 5 (Threats to Validity: Construct, Internal, External).
-- Package experimental scripts and data for Zenodo DOI replication archiving.
+- Draft Section 5 (Threats to Validity: Construct, Internal, External) and Section 6 (Conclusion & Artifacts).
+- Package experimental scripts, configuration, and data for Zenodo DOI replication archiving.
