@@ -99,6 +99,7 @@ Tracking daily progress, experimental findings, methodology updates, and decisio
 - **Batch 4:** Draft Section 3 (Empirical Study Design & Methodology) for our NIER paper submission.
 - **Batch 5:** Draft Section 4 (Empirical Results & Analysis) answering RQ1, RQ2, and RQ3.
 - **Batch 6:** Draft Sections 5 & 6 (Threats to Validity & Conclusion) and write Open Science `REPLICATION_GUIDE.md`.
+- **Batch 7:** Assemble unified full paper manuscript (`docs/PAPER_MANUSCRIPT_FULL.md`) and update project README.
 
 ### Completed Work
 - [x] **Executed Batch 1:**
@@ -131,7 +132,11 @@ Tracking daily progress, experimental findings, methodology updates, and decisio
 - [x] **Executed Batch 6 (Threats, Conclusion & Replication Guide):**
   - Drafted Section 5 (Threats to Validity) and Section 6 (Conclusion & Artifacts) in `docs/PAPER_DRAFT_THREATS_AND_CONCLUSION.md`.
   - Authored comprehensive artifact replication guide in `docs/REPLICATION_GUIDE.md`.
+  - Committed & Pushed: `d2d54e9`.
+- [x] **Executed Batch 7 (Unified Manuscript & Project Index):**
+  - Assembled complete 6-section conference manuscript in `docs/PAPER_MANUSCRIPT_FULL.md`.
+  - Updated `README.md` with key findings summary, publication figures index, and artifact reproduction instructions.
 
 ### Next Steps (Day 5)
-- Assemble complete unified paper manuscript in `docs/PAPER_MANUSCRIPT_FULL.md`.
-- Prepare submission checklist and Zenodo archive metadata.
+- Prepare LaTeX template (IEEE/ACM conference format) and render camera-ready PDF.
+- Package artifacts with DOI metadata (Zenodo / figshare) for double-blind or single-blind submission.
