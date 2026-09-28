@@ -1,24 +1,24 @@
 # Empirical Evaluation Results: Mutation Score vs. Fault Detection
 
-**Dataset Summary:** 8 total experiment records.
+**Dataset Summary:** 14 total experiment records.
 
-- Real Fault Detected: 4 trials
-- Real Fault Not Detected: 4 trials
+- Real Fault Detected: 7 trials
+- Real Fault Not Detected: 7 trials
 
 ## RQ1: Predictive Power of Mutation Score Gains
 | Metric | Value | p-value | Interpretation |
 |---|---|---|---|
-| **Spearman Rank ($\rho$)** | 0.165 | 0.6968 | Not Significant |
-| **Kendall Tau ($\tau$)** | 0.144 | 0.6631 | Rank concordant association |
-| **Partial Correlation ($r_{xy \cdot z}$)** | 0.170 | 0.7152 | Controlled for Test-Suite Size |
-| **Vargha-Delaney ($\hat{A}_{12}$)** | 0.594 | — | Small/Negligible |
-| **Cliff's Delta ($\delta$)** | 0.188 | — | Non-parametric dominance |
+| **Spearman Rank ($\rho$)** | 0.284 | 0.3254 | Not Significant |
+| **Kendall Tau ($\tau$)** | 0.241 | 0.3062 | Rank concordant association |
+| **Partial Correlation ($r_{xy \cdot z}$)** | 0.285 | 0.3447 | Controlled for Test-Suite Size |
+| **Vargha-Delaney ($\hat{A}_{12}$)** | 0.663 | — | Medium effect |
+| **Cliff's Delta ($\delta$)** | 0.327 | — | Non-parametric dominance |
 
 ## RQ2: Mutator Operator Efficiency Breakdown
 | Mutator Operator | Mean Score (Detected) | Mean Score (Undetected) | Predictive Signal |
 |---|---|---|---|
-| **Conditionals Boundary** | 49.81% | 49.81% | Neutral/Low |
-| **Negate Conditionals** | 20.09% | 20.09% | Neutral/Low |
-| **Math / Arithmetic** | 64.45% | 63.76% | Moderate |
-| **Void Method Calls** | 61.25% | 61.25% | Neutral/Low |
-| **Invert Negatives** | 37.50% | 37.50% | Neutral/Low |
+| **Conditionals Boundary** | 63.13% | 60.75% | Moderate |
+| **Negate Conditionals** | 11.48% | 11.48% | Neutral/Low |
+| **Math / Arithmetic** | 75.37% | 60.64% | Strong ($\Delta > +10\%$) |
+| **Void Method Calls** | 77.86% | 77.86% | Neutral/Low |
+| **Invert Negatives** | 21.43% | 21.43% | Neutral/Low |
