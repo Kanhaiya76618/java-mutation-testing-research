@@ -87,11 +87,43 @@ Tracking daily progress, experimental findings, methodology updates, and decisio
   - Cliff's Delta: $\delta = 0.188$.
 - [x] Operator breakdown indicates `Math / Arithmetic` and `Conditionals Boundary` mutators show higher sensitivity to regression test additions.
 
-### Key Technical Insights
-1. **PIT Bytecode Versioning Constraints:** PIT 1.16 is powered by ASM 9.x, which natively parses class files up to Java 21. Standardizing on OpenJDK 21 LTS eliminates all class file major version exceptions when testing classes that reflect on JDK internals (`java.util.Collections$EmptyList`).
-2. **Annotation-Level Suite Isolation:** Completely commenting out the test annotation (`/* @Test */`) is superior to using `@Disabled` because PIT's bytecode test discoverer ignores `@Disabled` unless configured with specific runner engines. Commenting out ensures the test method does not exist in the test engine's execution graph.
+---
 
-### Next Steps (Day 4)
-- Run remaining mined candidates in `data/mined_bugs_commons_lang.json` (target: $N \ge 10$ bug pairs, 20 total dataset rows).
-- Generate publication-ready correlation and effect size charts (`matplotlib` / `seaborn`).
-- Begin drafting Section 3 (Empirical Methodology) of the NIER paper.
+## Day 4 — Incremental Dataset Scaling, Visualizations & Paper Drafting (2026-09-28)
+
+### Objectives
+- Follow structured, batch-by-batch execution and incremental GitHub delivery.
+- **Batch 1:** Mine and evaluate time and character utility modules (`DurationFormatUtils`, `Conversion`, `CharRange`).
+- **Batch 2:** Mine and evaluate core string and timestamp modules (`StringUtils`, `Instants`).
+- **Batch 3:** Build automated publication plotting pipeline (`scripts/plot_results.py`) and generate figures for RQ1 and RQ2.
+- **Batch 4:** Draft Section 3 (Empirical Study Design & Methodology) for our NIER paper submission.
+
+### Completed Work
+- [x] **Executed Batch 1:**
+  - `DurationFormatUtils`: $\Delta MS = +0.40\%$ ($79.52\% \rightarrow 79.92\%$).
+  - `Conversion`: $\Delta MS = +0.34\%$ ($89.23\% \rightarrow 89.57\%$, 3 extra mutants killed).
+  - `CharRange.contains`: $\Delta MS = +23.08\%$ ($69.23\% \rightarrow 92.31\%$, 24 extra boundary mutants killed!).
+  - Committed & Pushed: `fc588e8`.
+- [x] **Executed Batch 2:**
+  - `StringUtils`: 2,187 mutants evaluated; $\Delta MS = +0.73\%$ ($5.58\% \rightarrow 6.31\%$, 16 extra mutants killed).
+  - `Instants`: $\Delta MS = +21.43\%$ ($71.43\% \rightarrow 92.86\%$, 3 extra mutants killed).
+  - Scaled dataset to **18 records across 9 distinct bug pairs**.
+  - Committed & Pushed: `20e31b8`.
+- [x] **Statistical Evolution:**
+  - **Controlled Partial Correlation ($r_{xy \cdot z}$):** Increased from $0.170 \rightarrow 0.285 \rightarrow \mathbf{0.324}$.
+  - **Vargha-Delaney Effect Size ($\hat{A}_{12}$):** Increased from $0.594 \rightarrow 0.663 \rightarrow \mathbf{0.685}$ (Medium effect approaching large effect threshold).
+  - **Cliff's Delta ($\delta$):** Rose to $\mathbf{0.370}$.
+  - **Math/Arithmetic Mutators:** Confirmed strong predictive signal ($\Delta > +10\%$ mean score for fault-detecting suites).
+- [x] **Executed Batch 3 (Visualizations):**
+  - Built `scripts/plot_results.py` using `seaborn` and `matplotlib`.
+  - Generated high-resolution publication charts:
+    - `figures/rq1_mutation_vs_fault_detection.png` (Boxplot of mutation distributions with strip overlays).
+    - `figures/rq2_mutator_sensitivity.png` (Horizontal grouped bar chart of individual mutator sensitivities).
+  - Committed & Pushed: `e5c133c`.
+- [x] **Executed Batch 4 (Paper Methodology):**
+  - Drafted comprehensive methodology section in `docs/PAPER_DRAFT_METHODOLOGY.md` covering inclusion criteria, annotation isolation, mutator operator taxonomy, and non-parametric statistical metrics.
+
+### Next Steps (Day 5)
+- Draft Section 4 (Empirical Results & Discussion) citing specific table values and Figure 1/2.
+- Draft Section 5 (Threats to Validity: Construct, Internal, External).
+- Package experimental scripts and data for Zenodo DOI replication archiving.
