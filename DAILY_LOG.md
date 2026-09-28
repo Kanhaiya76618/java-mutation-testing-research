@@ -98,6 +98,7 @@ Tracking daily progress, experimental findings, methodology updates, and decisio
 - **Batch 3:** Build automated publication plotting pipeline (`scripts/plot_results.py`) and generate figures for RQ1 and RQ2.
 - **Batch 4:** Draft Section 3 (Empirical Study Design & Methodology) for our NIER paper submission.
 - **Batch 5:** Draft Section 4 (Empirical Results & Analysis) answering RQ1, RQ2, and RQ3.
+- **Batch 6:** Draft Sections 5 & 6 (Threats to Validity & Conclusion) and write Open Science `REPLICATION_GUIDE.md`.
 
 ### Completed Work
 - [x] **Executed Batch 1:**
@@ -126,7 +127,11 @@ Tracking daily progress, experimental findings, methodology updates, and decisio
   - Committed & Pushed: `a95f9e2`.
 - [x] **Executed Batch 5 (Paper Results & Discussion):**
   - Drafted Section 4 in `docs/PAPER_DRAFT_RESULTS.md` with detailed statistical analysis tables, operator kill rate decompositions, and practical CI/CD pruning trade-offs.
+  - Committed & Pushed: `35eca19`.
+- [x] **Executed Batch 6 (Threats, Conclusion & Replication Guide):**
+  - Drafted Section 5 (Threats to Validity) and Section 6 (Conclusion & Artifacts) in `docs/PAPER_DRAFT_THREATS_AND_CONCLUSION.md`.
+  - Authored comprehensive artifact replication guide in `docs/REPLICATION_GUIDE.md`.
 
 ### Next Steps (Day 5)
-- Draft Section 5 (Threats to Validity: Construct, Internal, External) and Section 6 (Conclusion & Artifacts).
-- Package experimental scripts, configuration, and data for Zenodo DOI replication archiving.
+- Assemble complete unified paper manuscript in `docs/PAPER_MANUSCRIPT_FULL.md`.
+- Prepare submission checklist and Zenodo archive metadata.
