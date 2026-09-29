@@ -159,7 +159,11 @@ Tracking daily progress, experimental findings, methodology updates, and decisio
   - Built `scripts/reproduce_all.sh` orchestrating unit test execution, statistical analysis, and 300 DPI chart generation.
   - Verified local end-to-end execution.
   - Authored GitHub Actions workflow `.github/workflows/reproduce_and_test.yml` to automatically verify replication on Ubuntu runners on every commit.
+  - Committed & Pushed: `90adc4b`.
+- [x] **Executed Batch 3 (Zenodo Open-Science Archiving):**
+  - Authored MIT `LICENSE` ensuring open replication rights for ACM/IEEE badges.
+  - Authored `zenodo.json` archive descriptor with DOI metadata, keywords, and publication links.
+  - Built and verified automated standalone bundle packager `scripts/package_zenodo_artifact.sh`.
 
 ### Next Steps (Day 5 Batches)
-- Create Zenodo archival configuration and bundle script (Batch 3).
 - Draft submission checklist and finalize Day 5 review (Batch 4).

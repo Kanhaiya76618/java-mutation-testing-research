@@ -28,3 +28,6 @@ defects4j/
 benchmarks/
 data/raw/
 !data/raw/.gitkeep
+
+# Archives
+*.zip

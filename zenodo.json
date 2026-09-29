@@ -1,0 +1,37 @@
+{
+  "title": "Replication Package: When Does Raising Mutation Score Actually Raise Real-Fault Detection? An Empirical Investigation on Java Ecosystems",
+  "description": "Replication package and empirical artifact accompanying the paper 'When Does Raising Mutation Score Actually Raise Real-Fault Detection? An Empirical Investigation on Java Ecosystems'. Includes mined real-world regression bug fixes in Apache Commons Lang, PITest execution logs, method-level test annotation isolation harnesses, non-parametric statistical analysis scripts, and 300 DPI publication figures.",
+  "creators": [
+    {
+      "name": "Mehta, Kanhaiya",
+      "affiliation": "Independent Researcher",
+      "orcid": ""
+    }
+  ],
+  "access_right": "open",
+  "license": "MIT",
+  "keywords": [
+    "mutation testing",
+    "software testing",
+    "PITest",
+    "empirical software engineering",
+    "regression testing",
+    "fault detection",
+    "Vargha-Delaney",
+    "partial correlation"
+  ],
+  "upload_type": "software",
+  "communities": [
+    {
+      "identifier": "se-artifacts"
+    }
+  ],
+  "related_identifiers": [
+    {
+      "scheme": "url",
+      "identifier": "https://github.com/Kanhaiya76618/java-mutation-testing-research",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}
