@@ -1,0 +1,36 @@
+name: CI Artifact Replication & Verification
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify-replication:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run End-to-End Replication Script
+        run: |
+          chmod +x scripts/reproduce_all.sh
+          ./scripts/reproduce_all.sh
+
+      - name: Upload Replication Figures as Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: replication-figures
+          path: figures/

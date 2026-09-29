@@ -154,8 +154,12 @@ Tracking daily progress, experimental findings, methodology updates, and decisio
   - Authored standard IEEEtran two-column conference paper in `paper/main.tex`.
   - Authored complete BibTeX references in `paper/references.bib` covering 2024–2026 literature.
   - Embedded empirical tables (RQ1 statistical summary, RQ2 mutator decomposition), formulas, and methodology descriptions.
+  - Committed & Pushed: `d5c0d9c`.
+- [x] **Executed Batch 2 (Automated Replication Script & CI):**
+  - Built `scripts/reproduce_all.sh` orchestrating unit test execution, statistical analysis, and 300 DPI chart generation.
+  - Verified local end-to-end execution.
+  - Authored GitHub Actions workflow `.github/workflows/reproduce_and_test.yml` to automatically verify replication on Ubuntu runners on every commit.
 
 ### Next Steps (Day 5 Batches)
-- Build automated replication script and CI workflow (Batch 2).
 - Create Zenodo archival configuration and bundle script (Batch 3).
 - Draft submission checklist and finalize Day 5 review (Batch 4).
