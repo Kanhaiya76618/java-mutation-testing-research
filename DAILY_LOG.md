@@ -136,7 +136,26 @@ Tracking daily progress, experimental findings, methodology updates, and decisio
 - [x] **Executed Batch 7 (Unified Manuscript & Project Index):**
   - Assembled complete 6-section conference manuscript in `docs/PAPER_MANUSCRIPT_FULL.md`.
   - Updated `README.md` with key findings summary, publication figures index, and artifact reproduction instructions.
+  - Committed & Pushed: `e0fbe1e`.
 
-### Next Steps (Day 5)
-- Prepare LaTeX template (IEEE/ACM conference format) and render camera-ready PDF.
-- Package artifacts with DOI metadata (Zenodo / figshare) for double-blind or single-blind submission.
+---
+
+## Day 5 — Camera-Ready LaTeX Manuscript, CI Replication & Zenodo Packaging (2026-09-29)
+
+### Objectives
+- Follow incremental batch delivery to GitHub for all Day 5 research deliverables.
+- **Batch 1:** Format camera-ready two-column IEEE/ACM LaTeX conference manuscript (`paper/main.tex`, `paper/references.bib`).
+- **Batch 2:** Build automated end-to-end replication script (`scripts/reproduce_all.sh`) and GitHub Actions CI workflow.
+- **Batch 3:** Author Zenodo open-science DOI archive metadata (`zenodo.json`) and packaging script.
+- **Batch 4:** Draft conference submission checklist (`docs/SUBMISSION_CHECKLIST.md`) for ICSE NIER / ISSTA Workshop.
+
+### Completed Work
+- [x] **Executed Batch 1 (LaTeX Manuscript):**
+  - Authored standard IEEEtran two-column conference paper in `paper/main.tex`.
+  - Authored complete BibTeX references in `paper/references.bib` covering 2024–2026 literature.
+  - Embedded empirical tables (RQ1 statistical summary, RQ2 mutator decomposition), formulas, and methodology descriptions.
+
+### Next Steps (Day 5 Batches)
+- Build automated replication script and CI workflow (Batch 2).
+- Create Zenodo archival configuration and bundle script (Batch 3).
+- Draft submission checklist and finalize Day 5 review (Batch 4).
