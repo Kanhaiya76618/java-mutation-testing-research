@@ -170,5 +170,38 @@ Tracking daily progress, experimental findings, methodology updates, and decisio
   - Audited all empirical claims and hypotheses against `data/processed_results.csv`.
 
 ### Key Milestone Achieved
-The empirical research project and replication package are now **100% complete, peer-review ready, and fully reproducible**. All code, datasets, figures, scripts, LaTeX manuscripts, CI configurations, and documentation are hosted publicly at:
+The empirical research project and replication package are now peer-review ready and fully reproducible at:
 **https://github.com/Kanhaiya76618/java-mutation-testing-research**
+
+---
+
+## Day 6 — Peer-Review Critique Audit & Statistical Engine Enhancement (2026-09-30)
+
+### Objectives
+- Audit project against peer-review critique (Claude Sonnet 3.5 review).
+- Break implementation into incremental batches across dates per user request:
+  - **Today (Day 6):** Address mathematical and statistical rigor in `scripts/analyze_results.py` (within-subject paired analysis, exact Mann-Whitney U, Hanley-McNeil CI, and Leave-One-Bug-Out validation).
+  - **Future Date (Day 7):** Literature bibliography audit (Papadakis 2018, Foster 2025, Just 2014) and title/paper narrative reframing ("Protocol + Pilot Study").
+
+### Completed Work (Day 6)
+- [x] **Enhanced Statistical Analysis Engine (`scripts/analyze_results.py`):**
+  - **Within-Subject Matched Paired Analysis ($N=9$ bug pairs):**
+    - Calculated paired differentials ($MS_{aug} - MS_{base}$).
+    - **8 of 9 (88.9%)** bug pairs show strictly positive mutation score gains.
+    - Zero pairs show negative differentials.
+    - **Wilcoxon Signed-Rank Test:** $W = 36.0, p = 0.0039$ (statistically significant at $\alpha = 0.01$).
+    - **Paired Sign Test:** $p = 0.0039$.
+  - **Unpaired Distribution Metrics (81 pairwise comparisons):**
+    - Reported Mann-Whitney $U = 55.5, p = 0.2002$.
+    - Computed Hanley-McNeil 95% Confidence Interval for $\hat{A}_{12} = 0.685$ ($[0.43, 0.94]$), transparently noting that the interval spans $0.5$ in this pilot sample due to cross-class baseline variance.
+    - Explicitly clarified the algebraic identity: $\text{Cliff's } \delta = 2\hat{A}_{12} - 1 = 0.370$.
+  - **Leave-One-Bug-Out (LOBO) Cross-Validation for RQ2/RQ3:**
+    - Evaluated operator stability across 9 cross-validation folds to avoid circular evaluation.
+    - Confirmed `Math / Arithmetic` is positive in **9 of 9 (100%) folds** and `Conditionals Boundary` in **8 of 9 (89%) folds**.
+  - Verified one-click replication via `./scripts/reproduce_all.sh`.
+  - Updated `docs/LATEST_STATISTICAL_REPORT.md`.
+
+### Scheduled for Next Session (Day 7)
+- Update `paper/references.bib` with Papadakis et al. (ICSE 2018), corrected Foster et al. (2025), and Just et al. (FSE 2014).
+- Reframe paper title and narrative: *"Which Mutation Operators Track Real-Fault Detection? A Method-Level Isolation Protocol and Pilot Study on Apache Commons Lang"*.
+- Add Noether sample-size power analysis table to Section 5.
