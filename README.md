@@ -1,20 +1,20 @@
 # Empirical Evaluation of Mutation Testing for Regression-Test Fault Detection
 
 This repository hosts the replication package, experimental testbed, and daily research logs for our empirical study:
-**"When Does Raising Mutation Score Actually Raise Real-Fault Detection? An Empirical Investigation on Java Ecosystems"**
+**"Which Mutation Operators Track Real-Fault Detection? A Method-Level Isolation Protocol and Pilot Study on Apache Commons Lang"**
 
 🔗 **GitHub Repository:** [https://github.com/Kanhaiya76618/java-mutation-testing-research](https://github.com/Kanhaiya76618/java-mutation-testing-research)
 
 ## Research Objectives
-Building upon recent findings by Zhao, Zhou & Cohen (PACMSE/ISSTA 2026) and industrial mutation-guided testing (Meta FSE 2025), this study investigates the conditions under which mutation score increases predict real regression-fault detection:
-- **RQ1:** Across historical bug fixes, does $\Delta \text{MutationScore}$ correlate with real-fault detection when controlling for test-suite size?
-- **RQ2:** Which PIT mutator groups (`CONDITIONALS_BOUNDARY`, `NEGATE_CONDITIONALS`, `MATH`, `VOID_METHOD_CALLS`, etc.) offer the highest predictive signal-to-cost ratio?
-- **RQ3:** How do these correlations behave across different project architectures (Defects4J benchmarks vs. modern production systems like JabRef/Jenkins)?
+Building upon empirical literature (Papadakis et al. ICSE 2018, Just et al. FSE 2014, Zhao et al. ISSTA 2026) and industrial mutation testing (Foster et al. Meta FSE 2025), this study investigates the conditions under which mutation score increases predict real regression-fault detection:
+- **RQ1:** In within-subject matched pairs, does $\Delta \text{MutationScore}$ correlate with real-fault detection when controlling for test-suite size?
+- **RQ2:** Which PIT mutator groups (`CONDITIONALS_BOUNDARY`, `NEGATE_CONDITIONALS`, `MATH`, `VOID_METHOD_CALLS`, etc.) offer the highest predictive signal-to-cost ratio across Leave-One-Bug-Out cross-validation folds?
+- **RQ3:** What are the computational overhead trade-offs of selective operator pruning for continuous integration pipelines?
 
 ## Key Empirical Findings
-- **Size-Controlled Correlation:** When controlling for test suite expansion, mutation score gains correlate positively with real regression-fault detection ($r_{xy \cdot z} = 0.324$, $p = 0.20$).
-- **Effect Size:** **Vargha-Delaney $\hat{A}_{12} = 0.685$ (Medium effect)**, indicating that in 68.5% of cases, fault-detecting suites achieve higher mutation scores than non-detecting suites.
-- **Mutator Sensitivity:** `MATH` (+11.81%) and `CONDITIONALS_BOUNDARY` (+1.85%) mutators provide the strongest discriminatory signals, while `VOID_METHOD_CALLS` is saturated.
+- **Within-Subject Matched Pairs:** In **8 of 9 bug fixes (88.9%)**, adding tests catching real regression defects strictly increased class mutation score (mean gain $\overline{\Delta MS} = +5.55\%$, **Wilcoxon signed-rank $W = 36.0, p = 0.0039$**; paired sign test $p = 0.0039$).
+- **Unpaired Distribution Metrics:** Mann-Whitney $U = 55.5, p = 0.20$, Vargha-Delaney $\hat{A}_{12} = 0.685$ [95% CI: $0.43, 0.94$], Cliff's $\delta = 0.370$, and size-controlled partial rank correlation $r_{xy \cdot z} = 0.324$.
+- **Mutator Sensitivity (LOBO):** `MATH` (+11.81% differential, 100% positive LOBO folds) and `CONDITIONALS_BOUNDARY` (+1.85%, 89% positive folds) provide the strongest discriminatory signals, while `VOID_METHOD_CALLS` is saturated by baseline smoke tests.
 - **CI/CD Optimization:** Pruning to high-sensitivity operators reduces mutant generation by **63.4%** while preserving **91.2%** of fault-revealing score gains.
 
 ## Repository Structure

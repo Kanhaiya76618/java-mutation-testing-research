@@ -205,3 +205,34 @@ The empirical research project and replication package are now peer-review ready
 - Update `paper/references.bib` with Papadakis et al. (ICSE 2018), corrected Foster et al. (2025), and Just et al. (FSE 2014).
 - Reframe paper title and narrative: *"Which Mutation Operators Track Real-Fault Detection? A Method-Level Isolation Protocol and Pilot Study on Apache Commons Lang"*.
 - Add Noether sample-size power analysis table to Section 5.
+
+---
+
+## Day 7 — Literature Audit & Narrative Reframing (2026-10-02)
+
+### Objectives
+- Follow incremental batch delivery per user request.
+- **Part 1:** Audit bibliography and citations (`paper/references.bib`, `docs/RESEARCH_BRIEF.md`).
+- **Part 2:** Reframe paper title and narrative to protocol + empirical pilot study; synchronize matched paired analysis and power analysis tables (`paper/main.tex`, `docs/PAPER_MANUSCRIPT_FULL.md`, `README.md`).
+
+### Completed Work (Day 7)
+- [x] **Executed Part 1 (Literature Audit & Citations):**
+  - Updated `paper/references.bib` with verified entries:
+    - Papadakis et al. (ICSE 2018) on test suite size confounding.
+    - Foster et al. (FSE 2025) on Meta's ACH tool and targeted mutation analysis.
+    - Just et al. (FSE 2014) on real faults and coupling.
+    - Gopinath et al. (ICSE 2016) on the limits of mutation reduction.
+    - Chekam et al. (TSE 2020) on high mutation score thresholds.
+  - Updated `docs/RESEARCH_BRIEF.md` with complete audited literature synthesis.
+  - Committed & Pushed: `fe94b36`.
+- [x] **Executed Part 2 (Title, Narrative Reframing & Statistical Tables):**
+  - Updated paper title to: *"Which Mutation Operators Track Real-Fault Detection? A Method-Level Isolation Protocol and Pilot Study on Apache Commons Lang"*.
+  - Reframed manuscript tone from confirmatory claims to an empirical protocol and pilot study.
+  - Embedded within-subject matched paired analysis ($W = 36.0, p = 0.0039$, 8/9 positive pairs) alongside unpaired cross-bug distribution metrics ($\hat{A}_{12} = 0.685$ [0.43, 0.94], $U = 55.5, p = 0.20$).
+  - Embedded Leave-One-Bug-Out (LOBO) cross-validation table for operator sensitivity.
+  - Added Noether's sample size power analysis table in Section 5 establishing community scale-up requirements ($N \approx 77$--$134$ records for 80% power at $\alpha=0.05$).
+  - Synchronized `paper/main.tex`, `docs/PAPER_MANUSCRIPT_FULL.md`, and `README.md`.
+
+### Scheduled for Future Sessions
+- Multi-project expansion (e.g. Commons CSV, Gson, or Jsoup) for scale-up.
+- Automated TeX-to-PDF compilation workflow via GitHub Actions.

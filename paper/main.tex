@@ -21,23 +21,25 @@
 
 \begin{document}
 
-\title{When Does Raising Mutation Score Actually Raise Real-Fault Detection? An Empirical Investigation on Java Ecosystems}
+\title{Which Mutation Operators Track Real-Fault Detection? A Method-Level Isolation Protocol and Pilot Study on Apache Commons Lang}
 
 \author{Kanhaiya~Mehta%
 \thanks{K. Mehta is an independent software engineering researcher (email: kanhaiyakumar76618@gmail.com).}
 \thanks{Replication Package: \url{https://github.com/Kanhaiya76618/java-mutation-testing-research}}
 }
 
-\markboth{ICSE NIER / ISSTA Workshop Working Manuscript,~Vol.~1, No.~1,~September~2026}%
-{Mehta: When Does Raising Mutation Score Actually Raise Real-Fault Detection?}
+\markboth{IEEE/ACM Software Engineering Conferences (ICSE NIER / AST / ICST),~Vol.~1, No.~1,~October~2026}%
+{Mehta: Which Mutation Operators Track Real-Fault Detection?}
 
 \IEEEtitleabstractindextext{%
 \begin{abstract}
-Mutation testing is widely regarded as the gold standard for assessing test suite adequacy. However, recent empirical work has called into question whether driving up synthetic mutation scores translates into catching real-world regression defects in production software. In this paper, we present an empirical study investigating the real-fault predictive fidelity of bytecode mutation testing across historical bug-fixing commits in Java production libraries. To prevent test suite contamination while maintaining a completely green baseline for PITest, we introduce \textit{Method-Level Test Annotation Isolation}, evaluating both pre-fix base suites and regression-augmented suites under identical production bytecode. Across 18 experimental trials on 9 real-world defect pairs in Apache Commons Lang, our findings reveal: (1) When controlling for test suite size expansion, mutation score gains maintain a positive rank correlation ($r_{xy \cdot z} = 0.324$) and a medium-to-large effect size ($\hat{A}_{12} = 0.685$) for predicting real fault detection; (2) Mutation operators differ drastically in diagnostic efficacy: \texttt{MATH} (+11.81\% differential kill rate) and \texttt{CONDITIONALS\_BOUNDARY} (+1.85\%) exhibit high discriminatory sensitivity, whereas \texttt{VOID\_METHOD\_CALLS} and \texttt{INVERT\_NEGS} suffer from baseline saturation; and (3) Selective operator pruning reduces total mutant evaluation overhead by 63.4\% while retaining 91.2\% of fault-revealing score gains, providing an actionable Pareto-optimal strategy for continuous integration (CI) environments.
+Mutation testing is widely regarded as the gold standard for assessing test suite adequacy. However, empirical debates persist regarding whether mutation score gains reliably predict real regression fault detection once test-suite size is accounted for, and which specific operators provide actionable defect-revealing signals. In this paper, we introduce \textit{Method-Level Test Annotation Isolation}, an empirical protocol that evaluates pre-fix baseline suites and bug-detecting augmented suites under identical, 100\% green production bytecode without classpath incompatibilities or assertion contamination. We evaluate this protocol in an empirical pilot study across 9 historical regression bug-fixing pairs (18 experimental records) in Apache Commons Lang using PITest v1.16 on OpenJDK 21. 
+
+Our pilot findings demonstrate: (1) In within-subject matched-pair analysis, augmented suites exhibit strictly higher mutation scores than baseline suites in \textbf{8 of 9 bug fixes} (mean gain $\overline{\Delta MS} = +5.55\%$, Wilcoxon signed-rank $W = 36.0, p = 0.0039$), while unpaired cross-bug comparisons yield $\hat{A}_{12} = 0.685$ [95\% CI: $0.43, 0.94$] ($U = 55.5, p = 0.20$); (2) Mutator operators differ markedly in diagnostic sensitivity: \texttt{MATH} (+11.81\% differential kill rate, 100\% positive Leave-One-Bug-Out folds) and \texttt{CONDITIONALS\_BOUNDARY} (+1.85\%, 89\% positive folds) provide robust discriminatory signals, whereas \texttt{VOID\_METHOD\_CALLS} is saturated by baseline smoke tests; and (3) Selective operator pruning reduces total mutant evaluation volume by 63.4\% while retaining 91.2\% of fault-revealing score gains. We formalize sample-size power requirements ($N \approx 77$--$134$) for confirmatory multi-project scale-up.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Mutation Testing, Regression Testing, Real-Fault Detection, Empirical Software Engineering, PITest, Test Suite Quality.
+Mutation Testing, Regression Testing, Real-Fault Detection, Empirical Software Engineering, PITest, Selective Mutation, Test Suite Quality.
 \end{IEEEkeywords}}
 
 \maketitle
@@ -45,140 +47,158 @@ Mutation Testing, Regression Testing, Real-Fault Detection, Empirical Software E
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
-\IEEEPARstart{S}{oftware} testing research has long sought objective, automated criteria to determine whether a test suite is adequate. While code coverage metrics (statement, branch, and instruction coverage) remain the ubiquitous industrial standard, empirical studies have established that high coverage is an insufficient condition for defect detection~\cite{inozemtseva2014coverage}. Mutation testing addresses this limitation by systematically injecting syntactic faults (mutants) into source code or bytecode, evaluating whether test suites can detect and kill the mutations~\cite{coles2016pit}.
+\IEEEPARstart{S}{oftware} testing research has long sought objective, automated criteria to determine whether a test suite is adequate. While code coverage metrics remain the default industrial standard, empirical studies demonstrate that high coverage is an insufficient condition for defect detection~\cite{inozemtseva2014coverage}. Mutation testing addresses this limitation by injecting synthetic syntactic faults (mutants) into source code or bytecode, evaluating whether test suites detect and kill them~\cite{coles2016pit}.
 
-Despite its theoretical soundess grounded in the \textit{Competent Programmer Hypothesis} and the \textit{Coupling Effect}~\cite{just2014mutants}, practicing engineers frequently express skepticism regarding the practical returns of mutation testing. Recent empirical investigations in production environments~\cite{zhao2026revisiting, petrovic2025industrial} have highlighted critical tensions:
+While foundational work demonstrates that mutants are coupled to real faults~\cite{just2014mutants}, empirical and industrial investigations have raised critical caveats:
 \begin{enumerate}
-    \item \textbf{Diminishing Returns:} Industrial test generation engines (such as Meta's ACHILLES~\cite{petrovic2025industrial}) observe that optimizing aggressively for mutation score often yields test assertions that fail to catch regression defects in subsequent revisions.
-    \item \textbf{Confounding Suite Growth:} Adding test cases inherently increases code coverage and test lines of code ($SLOC_{test}$), trivially killing more mutants without necessarily improving defect detection power.
-    \item \textbf{Methodological Baseline Contamination:} Running mutation testing on buggy revisions violates the requirement for a clean, green baseline, while rolling back full test files introduces compilation incompatibilities against updated production APIs~\cite{zhao2026revisiting}.
+    \item \textbf{Test Suite Size Confounding:} Papadakis et al.~\cite{papadakis2018mutation} demonstrated that reported correlations between mutation score and real-fault detection are often driven by test-suite size ($SLOC_{test}$), weakening once size is controlled.
+    \item \textbf{Targeted vs. Combinatorial Mutation:} Industrial engineering reports (such as Meta's Automated Code Health tool ACH~\cite{foster2025ach}) show that modern practice favors small, targeted mutant subsets tailored to specific health concerns rather than exhaustive combinatorial mutation.
+    \item \textbf{Baseline Contamination:} Directly executing mutation tools on buggy revisions ($V_{bug}$) aborts pre-scans or yields false mutant kills due to pre-existing assertion failures, whereas rolling back full test files introduces compilation incompatibilities against updated production APIs~\cite{zhao2026revisiting}.
 \end{enumerate}
 
-To rigorously address these challenges, this paper presents a controlled empirical study on Java production code using PITest~\cite{coles2016pit} on OpenJDK 21 LTS. We introduce \textit{Method-Level Test Annotation Isolation} to evaluate test suite mutation scores without confounding baseline validity.
-
-\section{Research Questions}
-We structure our empirical investigation around three core research questions:
-
+To overcome these methodological challenges, this paper makes three contributions:
 \begin{itemize}
-    \item \textbf{RQ1 (Predictive Power):} \textit{Does an increase in test suite mutation score ($\Delta MS$) correlate with real regression fault detection when rigorously controlling for test suite size expansion?}
-    \begin{itemize}
-        \item \textbf{Hypothesis $H_1$:} Test suites augmented to catch real regression defects exhibit strictly higher mutation scores than baseline suites ($r_{xy \cdot z} > 0, \hat{A}_{12} > 0.5$).
-    \end{itemize}
-    \item \textbf{RQ2 (Operator Sensitivity):} \textit{Which mutation operator classes exhibit the highest discriminatory sensitivity for distinguishing fault-detecting test suites from non-detecting suites?}
-    \begin{itemize}
-        \item \textbf{Hypothesis $H_2$:} Arithmetic and boundary operators (\texttt{MATH}, \texttt{CONDITIONALS\_BOUNDARY}) provide higher discriminatory sensitivity than control-flow negation and void call stripping.
-    \end{itemize}
-    \item \textbf{RQ3 (Cost vs. Detection Trade-offs):} \textit{What is the computational overhead of comprehensive mutation analysis, and can selective operator pruning achieve practical efficiency in CI pipelines without sacrificing predictive fidelity?}
+    \item We introduce \textbf{Method-Level Test Annotation Isolation}, an automated protocol that evaluates base and augmented test suites against identical, 100\% green production bytecode.
+    \item We report an \textbf{empirical pilot study} across 9 real-world regression bug fixes in Apache Commons Lang, reporting within-subject paired statistics and Leave-One-Bug-Out (LOBO) operator cross-validation.
+    \item We analyze \textbf{operator pruning trade-offs} and establish formal power analysis guidelines for community replication.
 \end{itemize}
 
 \section{Empirical Methodology}
 
-\subsection{Subject Mining \& Selection Protocol}
-We mine historical bug-fixing commits from the Apache Commons Lang repository. A commit is included if and only if it satisfies four strict criteria:
-\begin{enumerate}
-    \item \textbf{Issue Resolution Anchor:} Commit message matches bug-fixing regular expressions (\texttt{fix}, \texttt{bug}, \texttt{issue}, \texttt{defect}).
-    \item \textbf{Dual Scope Modification:} The commit concurrently modifies production code (\texttt{src/main/java}) and unit test code (\texttt{src/test/java}).
-    \item \textbf{Atomic Containment:} Total files modified $\le 10$, excluding sweeping multi-package refactorings.
-    \item \textbf{Reproducible Failure:} The added test methods fail deterministically on the pre-fix state ($V_{bug}$) and pass on the fixed state ($V_{fix}$).
-\end{enumerate}
+\subsection{Subject Mining \& Inclusion Criteria}
+We mine historical bug-fixing commits from Apache Commons Lang satisfying four inclusion criteria: (1) Issue-resolution commit message regex (\texttt{fix}, \texttt{bug}, \texttt{issue}, \texttt{defect}); (2) Concurrent modifications to production code (\texttt{src/main/java}) and unit test code (\texttt{src/test/java}); (3) Atomic change containment ($\le 10$ files modified) to isolate unit regression logic; and (4) Verified reproducibility: added test methods fail deterministically on $V_{bug}$ and pass cleanly on $V_{fix}$.
 
 \subsection{Method-Level Test Annotation Isolation}
-Mutation analysis tools require a 100\% green test suite before execution. Direct execution on buggy code causes false mutant kills or pre-scan abortion. Furthermore, rolling back entire test files can cause compilation failures if unrelated tests reference new symbols.
-
-To resolve this, we implement \textit{Method-Level Test Annotation Isolation}:
+To guarantee that PITest executes on a 100\% green baseline without classpath contamination:
 \begin{itemize}
-    \item \textbf{Base Suite ($T_{base}$):} We parse the post-fix test suite and comment out the test annotations (\texttt{/* @Test */}, \texttt{/* @ParameterizedTest */}) corresponding to newly added regression test methods. The remaining suite compiles cleanly and runs green against $V_{fix}$, yielding $MS_{base}$.
-    \item \textbf{Augmented Suite ($T_{aug}$):} Annotations are restored, executing the complete suite against $V_{fix}$ to produce $MS_{aug}$.
-    \item \textbf{Differential Mutation Gain:} $\Delta MS = MS_{aug} - MS_{base}$.
+    \item \textbf{Base Suite ($T_{base}$):} We parse the post-fix test suite and comment out JUnit annotations (\texttt{/* @Test */}, \texttt{/* @ParameterizedTest */}) corresponding to newly added regression test methods. The remaining suite compiles cleanly and runs green on $V_{fix}$, producing $MS_{base}$.
+    \item \textbf{Augmented Suite ($T_{aug}$):} Annotations are restored and recompiled, executing the complete suite against $V_{fix}$ to produce $MS_{aug}$.
+    \item \textbf{Differential Gain:} $\Delta MS = MS_{aug} - MS_{base}$.
 \end{itemize}
 
-\subsection{Mutation Setup \& Statistical Procedures}
-Mutation testing is conducted using PITest v1.16.0 under OpenJDK 21 LTS with the \texttt{STRONGER} operator group (14 operator classes).
-
-To account for non-normality and test suite expansion:
-\begin{enumerate}
-    \item \textbf{Size-Controlled Partial Rank Correlation ($r_{xy \cdot z}$):}
-    \begin{equation}
-        r_{xy \cdot z} = \frac{r_{xy} - r_{xz} r_{yz}}{\sqrt{(1 - r_{xz}^2)(1 - r_{yz}^2)}}
-    \end{equation}
-    where $x = \Delta MS$, $y = \text{Fault Detected} \in \{0, 1\}$, and $z = SLOC_{test}$.
-    \item \textbf{Vargha-Delaney Effect Size ($\hat{A}_{12}$):}~\cite{vargha2000critique}
-    Quantifies the probability that a fault-detecting suite achieves a higher score than an undetected suite.
-    \item \textbf{Cliff's Delta ($\delta$):} Assesses non-parametric distribution dominance in $[-1, +1]$.
-\end{enumerate}
+\subsection{Experimental Setup}
+Bytecode mutation testing is conducted using PITest v1.16.0 under OpenJDK 21 LTS with the \texttt{STRONGER} operator group (14 operator classes).
 
 \section{Empirical Results \& Analysis}
 
 \subsection{RQ1: Predictive Power of Mutation Score Gains}
-Table~\ref{tab:rq1_stats} presents the statistical association between mutation score gains and real regression fault detection ($N = 18$ experimental records across 9 distinct bug pairs).
+Our pilot dataset consists of 9 matched bug pairs (18 records total). Because each bug fix generates a paired baseline ($T_{base}, FD=0$) and augmented suite ($T_{aug}, FD=1$), we analyze the data from both within-subject paired and unpaired distribution perspectives.
+
+\subsubsection{Within-Subject Matched Paired Analysis}
+Table~\ref{tab:paired_stats} reports the within-subject differences ($\Delta MS = MS_{aug} - MS_{base}$) across the 9 matched bug pairs.
 
 \begin{table}[htbp]
-\caption{Statistical Association for RQ1 ($N = 18$ records, 9 bug pairs)}
-\label{tab:rq1_stats}
+\caption{Within-Subject Matched Paired Analysis ($N = 9$ Pairs)}
+\label{tab:paired_stats}
+\centering
+\begin{tabular}{lc}
+\toprule
+\textbf{Metric} & \textbf{Observed Value} \\
+\midrule
+Total Matched Bug Pairs & 9 \\
+Positive Score Gains ($MS_{aug} > MS_{base}$) & \textbf{8 of 9} (88.9\%) \\
+Neutral Differences ($MS_{aug} == MS_{base}$) & 1 of 9 (11.1\%) \\
+Negative Differences ($MS_{aug} < MS_{base}$) & \textbf{0 of 9} (0.0\%) \\
+Mean Within-Pair Gain ($\overline{\Delta MS}$) & \textbf{+5.55\%} (Median: +0.73\%) \\
+\textbf{Wilcoxon Signed-Rank Test} & $W = 36.0, \mathbf{p = 0.0039}$ \\
+\textbf{Paired Sign Test} & $\mathbf{p = 0.0039}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+In 8 of the 9 bug fixes, adding the test method that catches the regression bug strictly increased the class mutation score. The Wilcoxon signed-rank test confirms that within-pair mutation score gains are statistically significant ($W = 36.0, p = 0.0039$).
+
+\subsubsection{Unpaired Cross-Bug Distribution Comparison}
+When treating the 18 records as independent samples across classes (81 pairwise cross-class comparisons), baseline variance across disparate classes (e.g., \texttt{StringUtils} base score 5.58\% vs. \texttt{Conversion} base score 89.23\%) widens the variance, as summarized in Table~\ref{tab:unpaired_stats}.
+
+\begin{table}[htbp]
+\caption{Unpaired Distribution Metrics (81 Cross-Group Pairs)}
+\label{tab:unpaired_stats}
 \centering
 \begin{tabular}{lccl}
 \toprule
 \textbf{Metric} & \textbf{Value} & \textbf{p-value} & \textbf{Interpretation} \\
 \midrule
-Spearman Rank ($\rho$) & \textbf{0.321} & 0.1934 & Moderate positive correlation \\
-Kendall's Tau ($\tau$) & \textbf{0.270} & 0.1851 & Positive rank concordance \\
-Partial Correlation ($r_{xy \cdot z}$) & \textbf{0.324} & 0.2039 & Controlled for suite size \\
-Vargha-Delaney ($\hat{A}_{12}$) & \textbf{0.685} & --- & \textbf{Medium Effect} ($\ge 0.64$) \\
-Cliff's Delta ($\delta$) & \textbf{0.370} & --- & Positive stochastic dominance \\
+Mann-Whitney $U$ & 55.5 & 0.2002 & Unpaired rank sum \\
+Vargha-Delaney ($\hat{A}_{12}$) & \textbf{0.685} & --- & Medium effect [95\% CI: 0.43, 0.94] \\
+Cliff's Delta ($\delta$) & 0.370 & --- & Identically $2\hat{A}_{12} - 1$ \\
+Spearman Rank ($\rho$) & 0.321 & 0.1934 & Moderate rank correlation \\
+Kendall's Tau ($\tau$) & 0.270 & 0.1851 & Concordant with Mann-Whitney \\
+Partial Corr ($r_{xy \cdot z}$) & 0.324 & 0.2039 & Controlled for test count \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Findings:} When controlling for test suite size growth, $r_{xy \cdot z} = 0.324$ confirms that the positive relationship between mutation score gain and fault detection persists independently of test suite expansion. The Vargha-Delaney statistic $\hat{A}_{12} = 0.685$ indicates that in \textbf{68.5\% of paired comparisons}, a fault-detecting test suite achieves a strictly higher mutation score than an undetected suite.
+The point estimate $\hat{A}_{12} = 0.685$ indicates a medium effect size favoring fault-detecting suites. However, its Hanley-McNeil 95\% confidence interval spans $[0.43, 0.94]$, illustrating that unpaired cross-class comparisons in small samples cannot rule out a null effect without matched pairing.
 
-\subsection{RQ2: Mutator Operator Sensitivity Breakdown}
-Table~\ref{tab:rq2_operators} shows the decomposition of mutant kill rates across individual operator categories between fault-detecting ($T_{aug}$) and non-detecting ($T_{base}$) suites.
+\subsection{RQ2: Mutator Operator Sensitivity \& Cross-Validation}
+To prevent circular evaluation when identifying sensitive mutators, we performed Leave-One-Bug-Out (LOBO) cross-validation across the 9 bug fixes. Table~\ref{tab:rq2_operators} shows operator score differentials and LOBO fold stability.
 
 \begin{table}[htbp]
-\caption{Mutator Operator Kill Rate Decomposition}
+\caption{Mutator Operator Kill Rates and LOBO Stability}
 \label{tab:rq2_operators}
 \centering
-\begin{tabular}{lccc}
+\begin{tabular}{lcccc}
 \toprule
-\textbf{Operator Category} & \textbf{Score ($FD=1$)} & \textbf{Score ($FD=0$)} & \textbf{Differential ($\Delta$)} \\
+\textbf{Operator Category} & \textbf{Score ($FD=1$)} & \textbf{Score ($FD=0$)} & \textbf{$\Delta$} & \textbf{LOBO Folds} \\
 \midrule
-\textbf{Math / Arithmetic} & \textbf{59.51\%} & \textbf{47.70\%} & \textbf{+11.81\%} \\
-\textbf{Conditionals Boundary} & \textbf{49.63\%} & \textbf{47.78\%} & \textbf{+1.85\%} \\
-Negate Conditionals & 8.93\% & 8.93\% & 0.00\% \\
-Void Method Calls & 60.56\% & 60.56\% & 0.00\% \\
-Invert Negatives & 16.67\% & 16.67\% & 0.00\% \\
+\textbf{Math / Arithmetic} & \textbf{59.51\%} & \textbf{47.70\%} & \textbf{+11.81\%} & \textbf{9/9 (100\%)} \\
+\textbf{Conditionals Boundary} & \textbf{49.63\%} & \textbf{47.78\%} & \textbf{+1.85\%} & \textbf{8/9 (89\%)} \\
+Negate Conditionals & 8.93\% & 8.93\% & +0.00\% & 0/9 (0\%) \\
+Void Method Calls & 60.56\% & 60.56\% & +0.00\% & 0/9 (0\%) \\
+Invert Negatives & 16.67\% & 16.67\% & +0.00\% & 0/9 (0\%) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Findings:} \texttt{MATH} operators demonstrate the strongest discriminatory power (+11.81\% higher kill rate for fault-detecting suites). Boundary mutators (\texttt{CONDITIONALS\_BOUNDARY}) also consistently differentiate tests. In contrast, \texttt{VOID\_METHOD\_CALLS} is killed equally by base and augmented suites (60.56\%), as removing void calls triggers runtime exceptions already exercised by baseline smoke tests.
+\texttt{MATH} operators exhibited the strongest discriminatory power (+11.81\% mean differential), remaining positive in 100\% of LOBO folds. Boundary mutators (\texttt{CONDITIONALS\_BOUNDARY}) remained positive in 89\% of folds. In contrast, \texttt{VOID\_METHOD\_CALLS} and \texttt{NEGATE\_CONDITIONALS} exhibited saturation or dormancy across the evaluation corpus.
 
-\subsection{RQ3: Overhead and CI/CD Pruning Trade-offs}
-In large monolithic classes such as \texttt{StringUtils}, PITest evaluated 2,187 mutants, requiring 132.8 seconds per evaluation run. 
-
-Across our corpus, an average of 34.2\% of mutants survived both base and augmented suites, primarily due to equivalent mutants and dead code paths.
-
-By restricting mutation testing to the top-performing operators (\texttt{MATH} and \texttt{CONDITIONALS\_BOUNDARY}):
+\subsection{RQ3: CI/CD Pruning Trade-offs}
+Evaluating all 2,187 mutants in large classes (e.g., \texttt{StringUtils}) required 132.8 seconds per run. Restricting mutation analysis to \texttt{MATH} and \texttt{CONDITIONALS\_BOUNDARY}:
 \begin{itemize}
-    \item Total generated mutants decreased by \textbf{63.4\%}.
-    \item Execution latency decreased by \textbf{65.8\%} (from 132s to under 45s for large classes).
-    \item The pruned subset retained \textbf{91.2\%} of the differential score sensitivity observed in the full suite.
+    \item Reduced generated mutants by \textbf{63.4\%}.
+    \item Cut execution latency by \textbf{65.8\%} (from 132s to under 45s).
+    \item Retained \textbf{91.2\%} of the differential score sensitivity observed in the full suite.
 \end{itemize}
+In accordance with Gopinath et al.~\cite{gopinath2016limits}, operator pruning provides practical speedups for utility software, though omission faults and call-site deletions require supplementary heuristics in mock-heavy systems.
 
-\section{Threats to Validity}
-\textbf{Construct Validity:} We operationalize defect detection using real-world regression bug fixes rather than artificial seeded mutants. Test suite size expansion was controlled via partial rank correlation ($r_{xy \cdot z}$).
+\section{Threats to Validity \& Power Analysis}
 
-\textbf{Internal Validity:} We standardized on OpenJDK 21 LTS to eliminate ASM bytecode major version 70 reflection errors. Fixed execution timeout multipliers ($1.25\times$) prevented CPU throttling distortion.
+\subsection{Sample Size \& Power Analysis}
+While our pilot ($N=18$ records, 9 matched pairs) yields statistically significant within-pair results ($p = 0.0039$), confirmatory unpaired population-level claims require larger samples. Table~\ref{tab:noether_power} applies Noether's sample size approximation for Mann-Whitney tests ($\alpha = 0.05$ two-sided, 80\% power):
+\begin{equation}
+    N \approx \frac{7.85}{3 \cdot (\hat{A}_{12} - 0.5)^2}
+\end{equation}
 
-\textbf{External Validity:} Our subjects are mined from Apache Commons Lang, a widely used foundational Java library. While representative of computational and algorithmic logic, generalizability to multi-threaded web frameworks or asynchronous microservices requires future study.
+\begin{table}[htbp]
+\caption{Sample Size Requirements for Unpaired Confirmatory Tests}
+\label{tab:noether_power}
+\centering
+\begin{tabular}{ccc}
+\toprule
+\textbf{Target True Effect ($\hat{A}_{12}$)} & \textbf{Classification} & \textbf{Total Records Needed ($N$)} \\
+\midrule
+0.685 & Pilot Estimate & $\approx 77$ \\
+0.640 & Vargha-Delaney Medium & $\approx 134$ \\
+0.600 & Small-to-Moderate & $\approx 262$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\textbf{Conclusion Validity:} Non-parametric rank statistics ($\rho, \tau, r_{xy \cdot z}, \hat{A}_{12}, \delta$) were applied strictly to account for non-normal score distributions.
+Our study serves as a validated experimental protocol and empirical pilot, establishing the baseline for scale-up across Defects4J 2.0.
+
+\subsection{Construct, Internal \& External Validity}
+\textbf{Construct Validity:} We controlled for test-suite size via partial rank correlation ($r_{xy \cdot z}$) following Papadakis et al.~\cite{papadakis2018mutation}, and avoided baseline contamination via method-level annotation isolation.
+
+\textbf{Internal Validity:} Bytecode execution was standardized on OpenJDK 21 LTS, eliminating ASM major version 70 reflection errors. Fixed execution timeout factors ($1.25\times$) prevented CPU throttling distortion.
+
+\textbf{External Validity:} Our pilot evaluated Apache Commons Lang, representing algorithmic and computational utility code. Generalizability to state-machine, parsing, or mock-heavy enterprise architectures represents an important avenue for future work.
 
 \section{Conclusion}
-In this empirical study, we investigated the real-fault predictive fidelity of Java bytecode mutation testing across historical bug-fixing commits. Using method-level test annotation isolation, we demonstrated that mutation score gains provide a positive, medium-to-large predictive signal for real regression fault detection ($r_{xy \cdot z} = 0.324, \hat{A}_{12} = 0.685$), with \texttt{MATH} and \texttt{CONDITIONALS\_BOUNDARY} operators providing the highest discriminatory utility. Selective operator pruning reduces execution cost by over 60\% while retaining >90\% of predictive power, offering a practical pathway for continuous integration.
+This paper presented Method-Level Test Annotation Isolation, an empirical protocol for evaluating mutation testing without classpath or baseline contamination. In a pilot study on Apache Commons Lang, we demonstrated that mutation score gains reliably track real fault detection within matched pairs ($W = 36.0, p = 0.0039$), with arithmetic and boundary operators providing the strongest discriminatory signal. Pruning to these sensitive operators cuts execution time by over 65\% while retaining >90\% of sensitivity, offering a viable path for continuous integration.
 
 \section*{Data Availability}
-All datasets, test harnesses, analysis scripts, and high-resolution figures are available in our open replication package:
+All datasets, harnesses, reproduction scripts, and publication figures are available in our open replication package:
 \url{https://github.com/Kanhaiya76618/java-mutation-testing-research}
 
 \bibliographystyle{IEEEtran}
