@@ -236,3 +236,27 @@ The empirical research project and replication package are now peer-review ready
 ### Scheduled for Future Sessions
 - Multi-project expansion (e.g. Commons CSV, Gson, or Jsoup) for scale-up.
 - Automated TeX-to-PDF compilation workflow via GitHub Actions.
+
+---
+
+## Day 8 — Defect Taxonomy Analysis & Automated TeX-to-PDF CI (2026-10-03)
+
+### Objectives
+- Follow structured part-by-part batch delivery.
+- **Part 1:** Author defect taxonomy and operator sensitivity mapping (`docs/DEFECT_TAXONOMY_MAPPING.md`) to isolate defect mechanics from repository bias.
+- **Part 2:** Implement automated LaTeX paper compilation workflow via GitHub Actions (`.github/workflows/compile_paper.yml`).
+
+### Completed Work (Day 8)
+- [x] **Executed Part 1 (Defect Taxonomy & Operator Sensitivity Mapping):**
+  - Categorized all 9 bug fixes into formal IEEE/ACM defect taxonomy classifications: Relational Boundary, Arithmetic & Overflow, Range/Index Checking, Data Conversion/Bitwise, and State/Parsing.
+  - Demonstrated that the high predictive signal of `MATH` and `CONDITIONALS_BOUNDARY` directly derives from syntactic coupling to dominant real-world defect mechanisms (fencepost off-by-one errors and index calculations), rather than accidental dataset artifact.
+  - Documented why `VOID_METHOD_CALLS` and `NEGATE_CONDITIONALS` saturate baseline smoke tests.
+  - Authored comprehensive analysis in `docs/DEFECT_TAXONOMY_MAPPING.md`.
+  - Committed & Pushed: `e23e830`.
+- [x] **Executed Part 2 (Automated TeX Compilation Pipeline):**
+  - Authored `.github/workflows/compile_paper.yml` using `xu-cheng/latex-action@v3` with bibtex.
+  - Configured automated artifact upload so that camera-ready `main.pdf` is built and downloadable directly from GitHub Actions on every push to `paper/`.
+
+### Scheduled for Future Sessions
+- Multi-project candidate mining and configuration (e.g. Commons CSV, Gson).
+- Pre-submission review checklist validation.

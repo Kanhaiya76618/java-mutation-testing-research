@@ -1,0 +1,31 @@
+name: Compile LaTeX Paper to PDF
+
+on:
+  push:
+    paths:
+      - 'paper/**'
+      - '.github/workflows/compile_paper.yml'
+  pull_request:
+    paths:
+      - 'paper/**'
+  workflow_dispatch:
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX Document
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          working_directory: paper
+          latexmk_use_bibtex: true
+
+      - name: Upload Compiled Paper PDF Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: camera-ready-paper-pdf
+          path: paper/main.pdf
