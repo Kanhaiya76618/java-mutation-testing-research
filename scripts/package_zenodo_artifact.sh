@@ -27,7 +27,7 @@ zip -r "${OUTPUT_PATH}" \
   zenodo.json \
   requirements.txt \
   config/ \
-  data/mined_bugs_commons_lang.json \
+  data/*.json \
   data/processed_results.csv \
   docs/ \
   figures/ \

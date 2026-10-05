@@ -40,7 +40,7 @@ echo "  [✓] Statistical analysis verified and saved to docs/LATEST_STATISTICAL
 
 # Step 4: Regenerate High-Resolution Publication Figures
 echo ""
-echo "[4/4] Regenerating publication-ready figures (300 DPI)..."
+echo "[4/6] Regenerating publication-ready figures (300 DPI)..."
 python3 scripts/plot_results.py
 
 if [[ -f "figures/rq1_mutation_vs_fault_detection.png" && -f "figures/rq2_mutator_sensitivity.png" ]]; then
@@ -51,6 +51,18 @@ else
     echo "  [!] ERROR: Expected figures not found in figures/ directory!"
     exit 1
 fi
+
+# Step 5: Run Leave-One-Bug-Out Cross-Validation
+echo ""
+echo "[5/6] Running Leave-One-Bug-Out (LOBO) pruning cross-validation..."
+python3 scripts/lobo_pruning_evaluator.py
+echo "  [✓] LOBO report saved to docs/LOBO_CROSS_VALIDATION_REPORT.md."
+
+# Step 6: Benchmark Mutation Reduction Baselines
+echo ""
+echo "[6/6] Benchmarking selective pruning vs random sampling and PITest DEFAULTS..."
+python3 scripts/compare_baselines.py
+echo "  [✓] Baseline report saved to docs/BASELINE_COMPARISON_REPORT.md."
 
 echo ""
 echo "========================================================================"
