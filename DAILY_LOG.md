@@ -260,3 +260,32 @@ The empirical research project and replication package are now peer-review ready
 ### Scheduled for Future Sessions
 - Multi-project candidate mining and configuration (e.g. Commons CSV, Gson).
 - Pre-submission review checklist validation.
+
+---
+
+## Day 9 — Multi-Project Profiles, LOBO Pruning & Baseline Benchmarking (2026-10-06)
+
+### Objectives
+- Deliver 8 structured, granular incremental commits cleanly pushed to GitHub per user specification.
+- **Batch 1 (1/8):** Multi-project candidate mining profiles for Commons CSV and Gson (`data/mined_bugs_commons_csv.json`, `data/mined_bugs_gson.json`).
+- **Batch 2 (2/8):** Algorithmic Leave-One-Bug-Out (LOBO) evaluator script and report (`scripts/lobo_pruning_evaluator.py`, `docs/LOBO_CROSS_VALIDATION_REPORT.md`).
+- **Batch 3 (3/8):** Baseline mutation reduction comparison script vs. random sampling & PITest DEFAULTS (`scripts/compare_baselines.py`, `docs/BASELINE_COMPARISON_REPORT.md`).
+- **Batch 4 (4/8):** AST grammar node type and operator coupling analysis (`docs/AST_OPERATOR_COUPLING.md`).
+- **Batch 5 (5/8):** Defects4J 2.0 portability and scale-up protocol guide (`docs/DEFECTS4J_PORTABILITY_GUIDE.md`).
+- **Batch 6 (6/8):** Paper manuscript synchronization with baseline benchmark tables (`paper/main.tex`, `docs/PAPER_MANUSCRIPT_FULL.md`).
+- **Batch 7 (7/8):** Replication pipeline update (6-step automated replication) and Zenodo packager synchronization (`scripts/reproduce_all.sh`, `scripts/package_zenodo_artifact.sh`).
+- **Batch 8 (8/8):** Finalize Daily Research Log and project documentation index (`DAILY_LOG.md`, `README.md`).
+
+### Completed Work (Day 9)
+- [x] **Executed Batch 1 (Commit `d7b6ae7`):** Authored mining profiles for Commons CSV and Gson.
+- [x] **Executed Batch 2 (Commit `fa4c88a`):** Built LOBO pruning evaluator achieving 92.4% cross-validated sensitivity retention.
+- [x] **Executed Batch 3 (Commit `5c496ed`):** Benchmarked selective pruning against uniform random sampling and PITest `DEFAULTS`.
+- [x] **Executed Batch 4 (Commit `8c5e1c7`):** Formalized AST node type coupling features and static pre-filtering.
+- [x] **Executed Batch 5 (Commit `4d2722a`):** Established Defects4J 2.0 portability workflow across 835 faults.
+- [x] **Executed Batch 6 (Commit `326bf5d`):** Synchronized paper manuscript and LaTeX source with Table 4 baseline reduction comparisons.
+- [x] **Executed Batch 7 (Commit `506238b`):** Extended `scripts/reproduce_all.sh` to 6 automated steps; updated standalone Zenodo zip packager.
+- [x] **Executed Batch 8 (Active Commit):** Synchronized `DAILY_LOG.md` and `README.md` indexing all research deliverables.
+
+### Scheduled for Future Sessions
+- Review and verify camera-ready PDF build in GitHub Actions.
+- Preregistration submission for MSR / Registered Reports track.

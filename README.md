@@ -21,12 +21,14 @@ Building upon empirical literature (Papadakis et al. ICSE 2018, Just et al. FSE 
 ```text
 ├── DAILY_LOG.md               # Daily progress tracker, notes, and milestones
 ├── docs/                      # Theoretical framework, literature synthesis, and paper drafts
-│   ├── PAPER_MANUSCRIPT_FULL.md          # Complete unified NIER paper manuscript
-│   ├── PAPER_DRAFT_METHODOLOGY.md        # Empirical methodology draft (§3)
-│   ├── PAPER_DRAFT_RESULTS.md            # Empirical results & analysis draft (§4)
-│   ├── PAPER_DRAFT_THREATS_AND_CONCLUSION.md # Validity threats & conclusion (§5 & §6)
+│   ├── PAPER_MANUSCRIPT_FULL.md          # Complete unified conference manuscript
+│   ├── DEFECT_TAXONOMY_MAPPING.md        # Bug classification & operator coupling analysis
+│   ├── DEFECTS4J_PORTABILITY_GUIDE.md    # 835-fault community replication protocol
+│   ├── AST_OPERATOR_COUPLING.md          # AST grammar nodes & static pre-filtering
+│   ├── LOBO_CROSS_VALIDATION_REPORT.md   # Leave-one-bug-out pruning validation
+│   ├── BASELINE_COMPARISON_REPORT.md     # Selective vs Random vs DEFAULTS benchmark
 │   ├── REPLICATION_GUIDE.md              # Open-science replication instructions
-│   ├── RESEARCH_BRIEF.md                 # Foundational literature synthesis (2023–2026)
+│   ├── RESEARCH_BRIEF.md                 # Foundational literature synthesis (2014–2026)
 │   └── RESEARCH_QUESTIONS.md             # Formal statistical hypotheses (RQ1, RQ2, RQ3)
 ├── figures/                   # High-resolution (300 DPI) publication figures
 │   ├── rq1_mutation_vs_fault_detection.png
@@ -39,10 +41,16 @@ Building upon empirical literature (Papadakis et al. ICSE 2018, Just et al. FSE 
 ├── scripts/                   # Automated experiment runners and analysis pipelines
 │   ├── run_experiment.py      # Single bug-pair evaluation pipeline
 │   ├── batch_runner.py        # Automated batch candidate evaluation
-│   ├── analyze_results.py     # Statistical analysis engine (Spearman, Partial Corr, A12)
-│   └── plot_results.py        # Publication chart generation pipeline
+│   ├── analyze_results.py     # Statistical analysis engine (Wilcoxon, A12, LOBO)
+│   ├── lobo_pruning_evaluator.py # Algorithmic LOBO cross-validation evaluator
+│   ├── compare_baselines.py   # Benchmarking selective pruning against baselines
+│   ├── plot_results.py        # Publication chart generation pipeline
+│   ├── reproduce_all.sh       # One-click 6-step replication script
+│   └── package_zenodo_artifact.sh # Standalone artifact packager
 ├── data/                      # Structured dataset for statistical evaluation
-│   ├── mined_bugs_commons_lang.json      # Mined candidate bug-fixing commits
+│   ├── mined_bugs_commons_lang.json      # Mined bug-fixing commits for Commons Lang
+│   ├── mined_bugs_commons_csv.json       # Candidate mining profile for Commons CSV
+│   ├── mined_bugs_gson.json              # Candidate mining profile for Google Gson
 │   └── processed_results.csv             # 18 experimental records across 9 bug pairs
 └── tests/                     # Unit test suite for miners and parsers
     ├── test_git_miner.py
