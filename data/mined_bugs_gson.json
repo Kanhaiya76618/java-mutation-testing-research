@@ -1,0 +1,46 @@
+[
+  {
+    "bug_id": "GSON-1",
+    "project": "gson",
+    "commit_hash": "e1f9a22",
+    "message": "Fix JsonReader token boundary on trailing escaped unicode characters",
+    "prod_files": [
+      "gson/src/main/java/com/google/gson/stream/JsonReader.java"
+    ],
+    "test_files": [
+      "gson/src/test/java/com/google/gson/stream/JsonReaderTest.java"
+    ],
+    "target_classes": [
+      "com.google.gson.stream.JsonReader"
+    ],
+    "target_tests": [
+      "com.google.gson.stream.JsonReaderTest"
+    ],
+    "added_test_methods": [
+      "testTrailingEscapedUnicodeBoundary"
+    ],
+    "defect_category": "State / Parsing Logic (SP)"
+  },
+  {
+    "bug_id": "GSON-2",
+    "project": "gson",
+    "commit_hash": "d7c8b33",
+    "message": "Fix TypeAdapters array index bounds when deserializing primitive numbers",
+    "prod_files": [
+      "gson/src/main/java/com/google/gson/internal/bind/TypeAdapters.java"
+    ],
+    "test_files": [
+      "gson/src/test/java/com/google/gson/internal/bind/TypeAdaptersTest.java"
+    ],
+    "target_classes": [
+      "com.google.gson.internal.bind.TypeAdapters"
+    ],
+    "target_tests": [
+      "com.google.gson.internal.bind.TypeAdaptersTest"
+    ],
+    "added_test_methods": [
+      "testPrimitiveNumberArrayBoundary"
+    ],
+    "defect_category": "Range / Index Checking (RI)"
+  }
+]

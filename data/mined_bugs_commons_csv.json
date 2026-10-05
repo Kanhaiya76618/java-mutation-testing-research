@@ -1,0 +1,70 @@
+[
+  {
+    "bug_id": "CSV-1",
+    "project": "commons-csv",
+    "commit_hash": "a4d8c01",
+    "message": "CSV-1 Fix quote escape handling in CSVParser for trailing whitespace and delimiters",
+    "prod_files": [
+      "src/main/java/org/apache/commons/csv/CSVParser.java",
+      "src/main/java/org/apache/commons/csv/Lexer.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/csv/CSVParserTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.csv.CSVParser",
+      "org.apache.commons.csv.Lexer"
+    ],
+    "target_tests": [
+      "org.apache.commons.csv.CSVParserTest"
+    ],
+    "added_test_methods": [
+      "testTrailingQuoteEscapeWithDelimiter"
+    ],
+    "defect_category": "State / Parsing Logic (SP)"
+  },
+  {
+    "bug_id": "CSV-2",
+    "project": "commons-csv",
+    "commit_hash": "b2e9f14",
+    "message": "CSV-2 Fix record separator boundary check in CSVPrinter",
+    "prod_files": [
+      "src/main/java/org/apache/commons/csv/CSVPrinter.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/csv/CSVPrinterTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.csv.CSVPrinter"
+    ],
+    "target_tests": [
+      "org.apache.commons.csv.CSVPrinterTest"
+    ],
+    "added_test_methods": [
+      "testPrintRecordWithNullAndCustomDelimiter"
+    ],
+    "defect_category": "Relational Boundary (RB)"
+  },
+  {
+    "bug_id": "CSV-4",
+    "project": "commons-csv",
+    "commit_hash": "c8a1b55",
+    "message": "CSV-4 Fix header offset index calculation when skipHeaderRecord is true",
+    "prod_files": [
+      "src/main/java/org/apache/commons/csv/CSVFormat.java"
+    ],
+    "test_files": [
+      "src/test/java/org/apache/commons/csv/CSVFormatTest.java"
+    ],
+    "target_classes": [
+      "org.apache.commons.csv.CSVFormat"
+    ],
+    "target_tests": [
+      "org.apache.commons.csv.CSVFormatTest"
+    ],
+    "added_test_methods": [
+      "testSkipHeaderRecordIndexOffset"
+    ],
+    "defect_category": "Range / Index Checking (RI)"
+  }
+]
