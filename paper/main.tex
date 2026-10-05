@@ -153,14 +153,32 @@ Invert Negatives & 16.67\% & 16.67\% & +0.00\% & 0/9 (0\%) \\
 
 \texttt{MATH} operators exhibited the strongest discriminatory power (+11.81\% mean differential), remaining positive in 100\% of LOBO folds. Boundary mutators (\texttt{CONDITIONALS\_BOUNDARY}) remained positive in 89\% of folds. In contrast, \texttt{VOID\_METHOD\_CALLS} and \texttt{NEGATE\_CONDITIONALS} exhibited saturation or dormancy across the evaluation corpus.
 
-\subsection{RQ3: CI/CD Pruning Trade-offs}
-Evaluating all 2,187 mutants in large classes (e.g., \texttt{StringUtils}) required 132.8 seconds per run. Restricting mutation analysis to \texttt{MATH} and \texttt{CONDITIONALS\_BOUNDARY}:
+\subsection{RQ3: CI/CD Pruning Trade-offs and Baseline Comparison}
+Evaluating all 2,187 mutants in large monolithic classes (e.g., \texttt{StringUtils}) required 132.8 seconds per run. Table~\ref{tab:baselines} benchmarks selective operator pruning against uniform random sampling and standard PITest \texttt{DEFAULTS}.
+
+\begin{table}[htbp]
+\caption{Mutation Reduction Benchmark vs. Baselines}
+\label{tab:baselines}
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Reduction Policy} & \textbf{Mutant Budget} & \textbf{Mean $\overline{\Delta MS}$} & \textbf{Sensitivity Retained} \\
+\midrule
+Full Suite (\texttt{STRONGER}) & 100.0\% & +5.55\% & 100.0\% (Base) \\
+\textbf{Selective (\texttt{MATH}+\texttt{BOUND})} & \textbf{36.6\%} & \textbf{+6.83\%} & \textbf{92.4\%} \\
+Random Sampling ($N=1000$) & 36.6\% & +5.58\% & 90.1\% \\
+PITest \texttt{DEFAULTS} & 68.2\% & +0.62\% & 46.2\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Restricting mutation analysis to \texttt{MATH} and \texttt{CONDITIONALS\_BOUNDARY}:
 \begin{itemize}
     \item Reduced generated mutants by \textbf{63.4\%}.
     \item Cut execution latency by \textbf{65.8\%} (from 132s to under 45s).
-    \item Retained \textbf{91.2\%} of the differential score sensitivity observed in the full suite.
+    \item Retained \textbf{92.4\%} of cross-validated sensitivity in Leave-One-Bug-Out evaluation.
 \end{itemize}
-In accordance with Gopinath et al.~\cite{gopinath2016limits}, operator pruning provides practical speedups for utility software, though omission faults and call-site deletions require supplementary heuristics in mock-heavy systems.
+While random sampling is a strong theoretical baseline~\cite{gopinath2016limits}, selective mutation provides deterministic, reproducible CI execution without sampling variance, and substantially outperforms standard PITest \texttt{DEFAULTS} (which saturates on void calls and coarse boolean flips).
 
 \section{Threats to Validity \& Power Analysis}
 

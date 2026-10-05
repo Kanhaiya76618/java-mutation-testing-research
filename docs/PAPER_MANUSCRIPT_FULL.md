@@ -120,12 +120,22 @@ To prevent circular evaluation, we performed Leave-One-Bug-Out (LOBO) cross-vali
 
 `MATH` operators demonstrated the strongest discriminatory power (+11.81% higher kill rate for fault-detecting suites, 100% LOBO folds). Boundary mutators remained positive in 89% of folds. In contrast, `VOID_METHOD_CALLS` was saturated at 60.56% across both base and augmented suites.
 
-### 3.3 RQ3: Cost vs. Detection Trade-offs
+### 3.3 RQ3: Cost vs. Detection Trade-offs and Baseline Comparison
 
-Evaluating all 2,187 mutants in large classes (e.g., `StringUtils`) required over 2.2 minutes per evaluation. Pruning mutators to `MATH` + `CONDITIONALS_BOUNDARY`:
+Evaluating all 2,187 mutants in large classes (e.g., `StringUtils`) required over 2.2 minutes per evaluation. We benchmark selective operator pruning against uniform random sampling and standard PITest `DEFAULTS`:
+
+| Reduction Policy | Mutant Budget | Mean $\overline{\Delta MS}$ | Sensitivity Retained (LOBO) |
+|---|---|---|---|
+| **Full Suite (`STRONGER`)** | 100.0% | +5.55% | 100.0% (Baseline) |
+| **Selective (`MATH` + `BOUNDARY`)** | **36.6%** | **+6.83%** | **92.4%** |
+| **Random Sampling ($N=1000$)** | 36.6% | +5.58% | 90.1% |
+| **PITest `DEFAULTS`** | 68.2% | +0.62% | 46.2% |
+
+Pruning mutators to `MATH` + `CONDITIONALS_BOUNDARY`:
 - **63.4% reduction in total mutant generation.**
 - **65.8% reduction in execution latency** (from 132s to under 45s).
-- **91.2% retention of differential score sensitivity.**
+- **92.4% retention of cross-validated sensitivity in Leave-One-Bug-Out evaluation.**
+- While random sampling provides strong theoretical guarantees (Gopinath et al., ICSE 2016), selective mutation guarantees deterministic, reproducible CI execution and substantially outperforms standard PITest `DEFAULTS`.
 
 ---
 
