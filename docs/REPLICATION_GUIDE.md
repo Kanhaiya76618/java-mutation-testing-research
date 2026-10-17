@@ -71,12 +71,27 @@ python3 scripts/plot_results.py
 ```
 
 ### Step 4: Run Mutation Analysis on a Bug Pair
-To run the full end-to-end pipeline on an individual mined candidate:
+To run the full end-to-end pipeline on one mined candidate (here index 12 of the mined list):
 ```bash
 python3 scripts/run_experiment.py \
-  --repo-path /path/to/commons-lang \
-  --commit <commit_hash> \
-  --target-class org.apache.commons.lang3.math.Fraction \
-  --target-test org.apache.commons.lang3.math.FractionTest \
+  --repo benchmarks/commons-lang \
+  --mined-bugs data/mined_bugs_commons_lang.json \
+  --index 12 \
   --mutators STRONGER
 ```
+To run a range of candidates:
+```bash
+python3 scripts/batch_runner.py --repo benchmarks/commons-lang --start 0 --limit 14
+```
+Outputs:
+- `data/v2/runs.csv`: one row per bug and suite (`base`, `augmented`) with Surefire test counts, PIT counts and scores, timings, and the tests that fail on the buggy version.
+- `data/v2/operators.csv`: one row per bug, suite and PIT mutator, with raw counts.
+- `data/v2/skipped.csv`: candidates that could not be evaluated, with the reason.
+- `data/raw/<bug_id>/`: the raw PIT report (`mutations.xml.gz`, with the full kill matrix), PIT's console output, and the Surefire reports for the buggy version and both suites.
+
+### Step 5: Equal-size Test-Subset Analysis (RQ1, RQ2)
+Uses the kill matrices from Step 4 to score thousands of random equal-size test subsets, without re-running PIT:
+```bash
+python3 scripts/subset_analysis.py --subsets 1000 --seed 2026
+```
+Outputs `docs/SUBSET_ANALYSIS.md` (sanity check against PIT, per-pair A12 for mutation score and coverage, per-operator A12) and the raw numbers in `data/v2/subset_analysis.csv` and `data/v2/subset_operators.csv`. The seed makes the results reproducible.
