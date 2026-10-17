@@ -16,12 +16,14 @@ separately in `unattributed`.
 
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Dict, Iterable, List, Optional, Sequence, Set
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Set
 
 import numpy as np
 from scipy.stats import rankdata
 
 from harness.pit_parser import PitMutationReport, key_from_test_name
+from harness.surefire_parser import SurefireResults
 
 
 @dataclass
@@ -110,3 +112,25 @@ def a12(positive: np.ndarray, negative: np.ndarray) -> Optional[float]:
         return None
     ranks = rankdata(np.concatenate([positive, negative]))
     return float((ranks[:m].sum() / m - (m + 1) / 2.0) / n)
+
+
+def load_pair(pair_dir: Path) -> Dict[str, Any]:
+    """Loads the measured data of one bug pair from its raw archive (data/raw/<bug_id>/).
+
+    pool            every test method of T_aug ('Class#method'), from Surefire
+    added           tests in T_aug but not in T_base
+    fault_revealing tests of the pool that fail on the buggy version V_bug
+    matrix          the kill matrix of T_aug
+    """
+    aug = SurefireResults.from_files(sorted((pair_dir / "augmented" / "surefire").glob("TEST-*.xml")))
+    base = SurefireResults.from_files(sorted((pair_dir / "base" / "surefire").glob("TEST-*.xml")))
+    bug = SurefireResults.from_files(sorted((pair_dir / "v_bug" / "surefire").glob("TEST-*.xml")))
+    pool = sorted(aug.keys())
+    report = PitMutationReport(pair_dir / "augmented" / "mutations.xml.gz")
+    return {
+        "pool": pool,
+        "added": sorted(set(pool) - base.keys()),
+        "fault_revealing": sorted(bug.keys(("failed", "error")) & set(pool)),
+        "matrix": KillMatrix.from_report(report, pool),
+        "pit_killed_aug": report.summary()["killed"],
+    }
