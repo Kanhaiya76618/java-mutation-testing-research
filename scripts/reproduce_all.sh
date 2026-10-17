@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # ==============================================================================
 # Automated Replication Script
-# "When Does Raising Mutation Score Actually Raise Real-Fault Detection?"
+# Recomputes every analysis, table, figure and paper number from the committed
+# measured data (data/v2/ and data/raw/). No Java or PIT is needed for this;
+# re-measuring the data itself is described in docs/REPLICATION_GUIDE.md (step 4).
 # ==============================================================================
 
 set -euo pipefail
@@ -18,54 +20,48 @@ echo "========================================================================"
 
 # Step 1: Verify Python Environment & Dependencies
 echo ""
-echo "[1/4] Checking Python environment and scientific libraries..."
-python3 -c "import pandas, scipy, seaborn, matplotlib; print('  [✓] All required scientific libraries are installed.')"
+echo "[1/6] Checking Python environment and scientific libraries..."
+python3 -c "import numpy, pandas, scipy, matplotlib; print('  [✓] All required scientific libraries are installed.')"
 
-# Step 2: Run Unit Tests for Mining & Parsing Harness
+# Step 2: Run Unit Tests for Harness and Analyses
 echo ""
-echo "[2/4] Running test harness suite..."
+echo "[2/6] Running test suite..."
 python3 -m unittest discover -s tests -v
 echo "  [✓] All unit tests completed successfully."
 
-# Step 3: Verify Dataset & Run Statistical Analysis Engine
+# Step 3: RQ1 - Naive base-vs-augmented analysis and its placebo
 echo ""
-echo "[3/4] Running non-parametric statistical analysis engine..."
-if [[ ! -f "data/processed_results.csv" ]]; then
-    echo "  [!] ERROR: data/processed_results.csv not found!"
-    exit 1
-fi
+echo "[3/6] Running the pitfall analysis (naive design vs. placebo)..."
+python3 scripts/pitfall_analysis.py > /dev/null
+echo "  [✓] docs/PITFALL_ANALYSIS.md, data/v2/pitfall_analysis.csv, paper/generated/pitfall_numbers.tex"
 
-python3 scripts/analyze_results.py
-echo "  [✓] Statistical analysis verified and saved to docs/LATEST_STATISTICAL_REPORT.md."
-
-# Step 4: Regenerate High-Resolution Publication Figures
+# Step 4: RQ2/RQ3 - Equal-size test-subset analysis on the kill matrix
 echo ""
-echo "[4/6] Regenerating publication-ready figures (300 DPI)..."
+echo "[4/6] Running the equal-size test-subset analysis..."
+python3 scripts/subset_analysis.py > /dev/null
+echo "  [✓] docs/SUBSET_ANALYSIS.md, data/v2/subset_*.csv, paper/generated/subset_numbers.tex"
+
+# Step 5: Figures and paper tables
+echo ""
+echo "[5/6] Regenerating figures and the paper's LaTeX tables..."
 python3 scripts/plot_results.py
+python3 scripts/paper_tables.py
+for f in figures/pitfall_placebo.pdf figures/a12_ms_vs_coverage.pdf paper/generated/table_pairs.tex paper/generated/table_operators.tex; do
+    if [[ ! -f "${f}" ]]; then
+        echo "  [!] ERROR: expected output ${f} not found!"
+        exit 1
+    fi
+done
 
-if [[ -f "figures/rq1_mutation_vs_fault_detection.png" && -f "figures/rq2_mutator_sensitivity.png" ]]; then
-    echo "  [✓] Figures successfully generated:"
-    echo "      - figures/rq1_mutation_vs_fault_detection.png"
-    echo "      - figures/rq2_mutator_sensitivity.png"
-else
-    echo "  [!] ERROR: Expected figures not found in figures/ directory!"
-    exit 1
-fi
-
-# Step 5: Run Leave-One-Bug-Out Cross-Validation
+# Step 6: Comparison of the original (v1) and re-measured (v2) data
 echo ""
-echo "[5/6] Running Leave-One-Bug-Out (LOBO) pruning cross-validation..."
-python3 scripts/lobo_pruning_evaluator.py
-echo "  [✓] LOBO report saved to docs/LOBO_CROSS_VALIDATION_REPORT.md."
-
-# Step 6: Benchmark Mutation Reduction Baselines
-echo ""
-echo "[6/6] Benchmarking selective pruning vs random sampling and PITest DEFAULTS..."
-python3 scripts/compare_baselines.py
-echo "  [✓] Baseline report saved to docs/BASELINE_COMPARISON_REPORT.md."
+echo "[6/6] Comparing the original CSV with the re-measured data..."
+python3 scripts/compare_v1_v2.py > /dev/null
+echo "  [✓] docs/DATA_V1_VS_V2.md"
 
 echo ""
 echo "========================================================================"
 echo " [✓] REPLICATION PIPELINE COMPLETED SUCCESSFULLY"
-echo " All results, tables, and figures match the published manuscript."
+echo " Every report, figure, table and paper number was regenerated from data/v2 and data/raw."
+echo " 'git status' shows whether anything differs from the committed versions."
 echo "========================================================================"

@@ -1,77 +1,58 @@
 # Artifact Replication Guide
 
-This guide details how to reproduce all empirical experiments, statistical analyses, and publication figures from our research study.
+How to reproduce every analysis, figure, table and paper number, and how to re-measure the data itself.
+The repository layout is described in the [README](../README.md).
 
 ---
 
-## 1. Prerequisites & Environment Setup
+## 1. Prerequisites
 
-- **Operating System:** macOS (Apple Silicon / Intel) or Linux (Ubuntu 22.04+).
-- **Java:** OpenJDK 21 LTS (`/opt/homebrew/opt/openjdk@21` on macOS or `openjdk-21-jdk` on Ubuntu).
-  - Check with: `java -version` (must report version 21.x).
-- **Maven:** Apache Maven 3.9+.
-- **Python:** Python 3.10+ with scientific computing libraries:
-  ```bash
-  pip install pandas scipy seaborn matplotlib
-  ```
+- **Analyses only (steps 2–4):** Python 3.10+ with `pip install -r requirements.txt`. No Java is needed;
+  everything is computed from the committed measured data in `data/v2/` and `data/raw/`.
+- **Re-measuring the data (step 5):** additionally OpenJDK 21 (`java -version` must report 21.x; on macOS
+  the runner uses `/opt/homebrew/opt/openjdk@21` when present), Apache Maven 3.9+, and a clone of
+  Apache Commons Lang in `benchmarks/commons-lang`.
+- **Building the paper (step 6):** a LaTeX distribution with `latexmk` and BibTeX, or Overleaf.
 
 ---
 
-## 2. Repository Structure
-
-```
-├── config/
-│   └── pit-mutators.json               # Operator groups (STRONGER, DEFAULTS, ALL)
-├── data/
-│   ├── mined_bugs_commons_lang.json    # Mined candidate bug-fixing commits
-│   └── processed_results.csv           # 18 experimental records across 9 bug pairs
-├── docs/
-│   ├── RESEARCH_BRIEF.md               # Theoretical foundation and literature synthesis
-│   ├── RESEARCH_QUESTIONS.md           # Formal hypothesis definitions (RQ1, RQ2, RQ3)
-│   ├── PAPER_DRAFT_METHODOLOGY.md      # Section 3 draft
-│   ├── PAPER_DRAFT_RESULTS.md          # Section 4 draft
-│   └── PAPER_DRAFT_THREATS_AND_CONCLUSION.md # Sections 5 & 6 draft
-├── figures/
-│   ├── rq1_mutation_vs_fault_detection.png # High-res RQ1 boxplot
-│   └── rq2_mutator_sensitivity.png         # High-res RQ2 operator bar chart
-├── harness/
-│   ├── git_miner.py                    # Mining engine for atomic bug fixes
-│   └── pit_parser.py                   # PITest mutations.xml extraction engine
-├── scripts/
-│   ├── run_experiment.py               # Single bug-pair evaluation pipeline
-│   ├── batch_runner.py                 # Multi-candidate automated runner
-│   ├── analyze_results.py              # Statistical computing engine
-│   └── plot_results.py                 # Publication chart generation pipeline
-└── tests/
-    ├── test_git_miner.py               # Unit tests for mining engine
-    └── test_pit_parser.py              # Unit tests for PITest XML parser
-```
-
----
-
-## 3. Reproduction Steps
-
-### Step 1: Verify Test Suite
-Ensure all parser and mining components function properly:
+## 2. Run the Unit Tests
 ```bash
 python3 -m unittest discover -s tests -v
 ```
 
-### Step 2: Reproduce Non-Parametric Statistical Analysis
-To re-run the statistical engine (Spearman $\rho$, Kendall $\tau$, controlled partial correlation $r_{xy \cdot z}$, Vargha-Delaney $\hat{A}_{12}$, Cliff's $\delta$, and operator breakdown):
+## 3. Recompute Everything from the Measured Data
 ```bash
-python3 scripts/analyze_results.py
+./scripts/reproduce_all.sh
 ```
-This generates a markdown summary at `docs/LATEST_STATISTICAL_REPORT.md` and prints the analysis to stdout.
+This runs the unit tests and steps 4a–4e below. Afterwards, `git status` shows whether any report,
+figure, table or paper number differs from the committed version (the outputs are deterministic:
+fixed seeds, no timestamps in figures).
 
-### Step 3: Reproduce Publication Figures
-To regenerate the 300 DPI publication figures in the `figures/` directory:
+## 4. Individual Analyses
+**a. RQ1, the pitfall (naive comparison vs. placebo):**
 ```bash
-python3 scripts/plot_results.py
+python3 scripts/pitfall_analysis.py --draws 1000 --seed 2026
 ```
+Writes `docs/PITFALL_ANALYSIS.md`, `data/v2/pitfall_analysis.csv` and `paper/generated/pitfall_numbers.tex`.
 
-### Step 4: Run Mutation Analysis on a Bug Pair
-To run the full end-to-end pipeline on one mined candidate (here index 12 of the mined list):
+**b. RQ2/RQ3, equal-size test subsets on the kill matrix:**
+```bash
+python3 scripts/subset_analysis.py --subsets 1000 --seed 2026
+```
+Writes `docs/SUBSET_ANALYSIS.md` (with a sanity check of the kill matrix against PIT's own counts),
+`data/v2/subset_*.csv` and `paper/generated/subset_numbers.tex`.
+
+**c. Figures:** `python3 scripts/plot_results.py` writes `figures/pitfall_placebo.(pdf|png)` and
+`figures/a12_ms_vs_coverage.(pdf|png)`.
+
+**d. Paper tables:** `python3 scripts/paper_tables.py` writes `paper/generated/table_pairs.tex` and
+`paper/generated/table_operators.tex`.
+
+**e. Original vs. re-measured data:** `python3 scripts/compare_v1_v2.py` writes `docs/DATA_V1_VS_V2.md`.
+
+## 5. Re-measure a Bug Pair (Java, Maven, PIT)
+To measure one mined candidate (here index 12 of the mined list):
 ```bash
 python3 scripts/run_experiment.py \
   --repo benchmarks/commons-lang \
@@ -79,19 +60,26 @@ python3 scripts/run_experiment.py \
   --index 12 \
   --mutators STRONGER
 ```
-To run a range of candidates:
+To measure a range of candidates:
 ```bash
 python3 scripts/batch_runner.py --repo benchmarks/commons-lang --start 0 --limit 14
 ```
 Outputs:
-- `data/v2/runs.csv`: one row per bug and suite (`base`, `augmented`) with Surefire test counts, PIT counts and scores, timings, and the tests that fail on the buggy version.
+- `data/v2/runs.csv`: one row per bug and suite (`base`, `augmented`) with Surefire test counts, PIT counts
+  and scores, timings, and the tests that fail on the buggy version.
 - `data/v2/operators.csv`: one row per bug, suite and PIT mutator, with raw counts.
 - `data/v2/skipped.csv`: candidates that could not be evaluated, with the reason.
-- `data/raw/<bug_id>/`: the raw PIT report (`mutations.xml.gz`, with the full kill matrix), PIT's console output, and the Surefire reports for the buggy version and both suites.
+- `data/raw/<bug_id>/`: the raw PIT report (`mutations.xml.gz`, with the full kill matrix), PIT's console
+  output, and the Surefire reports for the buggy version and both suites.
 
-### Step 5: Equal-size Test-Subset Analysis (RQ1, RQ2)
-Uses the kill matrices from Step 4 to score thousands of random equal-size test subsets, without re-running PIT:
+With the full kill matrix, PIT runs every covering test against every mutant, so runs are slower than
+normal PIT runs (up to about 15 minutes per suite for `DurationFormatUtils`). Timeouts can differ between
+runs, so re-measured counts may differ from the committed ones by a few mutants.
+
+## 6. Build the Paper
 ```bash
-python3 scripts/subset_analysis.py --subsets 1000 --seed 2026
+cd paper && latexmk -pdf main.tex
 ```
-Outputs `docs/SUBSET_ANALYSIS.md` (sanity check against PIT, per-pair A12 for mutation score and coverage, per-operator A12) and the raw numbers in `data/v2/subset_analysis.csv` and `data/v2/subset_operators.csv`. The seed makes the results reproducible.
+`paper/main.tex` includes `paper/generated/*.tex` and `figures/*.pdf`, so run step 3 first. Set
+`\anonymousfalse` in `main.tex` for a non-anonymous build. The GitHub workflow
+`.github/workflows/compile_paper.yml` builds the PDF on every push that changes `paper/`.

@@ -8,27 +8,31 @@ This guide outlines the foundational papers, theoretical concepts, and statistic
 
 ### Must-Read #1: The Anchor Paper (Read This First)
 * **Title:** *Do Coverage and Mutation Scores of LLM-Generated Test Suites Correlate with Their Effectiveness? (Replicability Study)*
-* **Authors:** Chenyu Zhao, Yang Zhou, Myra B. Cohen (2026)
-* **Venue:** *PACMSE* (ACM International Conference on Software Testing and Analysis / ISSTA 2026 track)
-* **Links:** [arXiv:2607.22880](https://arxiv.org/html/2607.22880v1) | [DOI: 10.1145/3832093](https://doi.org/10.1145/3832093)
-* **What to focus on:**
-  - Section 3: Experimental Methodology on Defects4J.
-  - Section 4: How they control for test-suite size using Kendall's $\tau$ and partial correlation.
-  - Section 5 & 6: The "Open Problems" section — this is the exact justification for our research questions (RQ1–RQ3).
+* **Authors:** Junda Zhao, Shurui Zhou, Eldan Cohen (2026)
+* **Venue:** *Proceedings of the ACM on Software Engineering* (ISSTA 2026 issue)
+* **Links:** [arXiv:2607.22880](https://arxiv.org/abs/2607.22880) | [DOI: 10.1145/3832093](https://doi.org/10.1145/3832093)
+* **What to focus on:** how they replicate two earlier coverage/mutation-score studies with LLM-generated
+  suites, and why the metrics are informative when comparing models on bug-free code but unreliable when
+  the code under test is already buggy.
 
 ### Must-Read #2: The Classic Foundations
-Before Zhao et al., these two seminal papers shaped the entire software engineering debate:
+Before Zhao et al., these papers shaped the debate:
 1. **Inozemtseva & Holmes (ICSE 2014):**
    * *Title:* "Coverage is not strongly correlated with test suite effectiveness."
    * *Key Takeaway:* Showed that when suite size is controlled, code coverage has only a low-to-moderate correlation with fault detection.
-2. **Papadakis et al. (IEEE TSE 2018):**
-   * *Title:* "Mutation testing versus code coverage in assessing test suite effectiveness: A large-scale empirical comparison."
-   * *Key Takeaway:* Showed that mutation score correlates significantly better with real-fault detection than statement or branch coverage.
+2. **Papadakis et al. (ICSE 2018):**
+   * *Title:* "Are mutation scores correlated with real fault detection? A large scale empirical study on the relationship between mutants and real faults." DOI: 10.1145/3180155.3180183.
+   * *Key Takeaway:* Much of the reported correlation between mutation score and real-fault detection comes from test-suite size; it is weak once size is controlled.
+3. **Chen et al. (ASE 2020):**
+   * *Title:* "Revisiting the relationship between fault detection, test adequacy criteria, and test set size." DOI: 10.1145/3324884.3416667.
+   * *Key Takeaway:* Argues that asking for correlation at a fixed test-set size is the wrong question and proposes a probabilistic framing instead.
+4. **Chekam et al. (ICSE 2017):**
+   * *Title:* "An empirical study on mutation, statement and branch coverage fault revelation that avoids the unreliable clean program assumption." DOI: 10.1109/ICSE.2017.61.
 
 ### Must-Read #3: Industrial Scale Application
 * **Title:** *Mutation-Guided LLM-based Test Generation at Meta*
-* **Authors:** Nadia Alshahwan et al. (Meta, FSE 2025)
-* **Venue:** *ACM International Conference on the Foundations of Software Engineering (FSE 2025)*
+* **Authors:** Christopher Foster, Abhishek Gulati, Mark Harman, Inna Harper, Ke Mao, Jillian Ritchey, Hervé Robert, Shubho Sengupta (Meta)
+* **Venue:** *FSE 2025 Companion (Industry track), pp. 180–191*
 * **Link:** [DOI: 10.1145/3696630.3728544](https://dl.acm.org/doi/10.1145/3696630.3728544)
 * **What to focus on:**
   - How industrial pipelines use surviving mutants as prompt context to iteratively ask LLMs to generate tests that kill those mutants.
