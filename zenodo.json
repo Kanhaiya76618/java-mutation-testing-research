@@ -1,6 +1,6 @@
 {
-  "title": "Replication Package: When Does Raising Mutation Score Actually Raise Real-Fault Detection? An Empirical Investigation on Java Ecosystems",
-  "description": "Replication package and empirical artifact accompanying the paper 'When Does Raising Mutation Score Actually Raise Real-Fault Detection? An Empirical Investigation on Java Ecosystems'. Includes mined real-world regression bug fixes in Apache Commons Lang, PITest execution logs, method-level test annotation isolation harnesses, non-parametric statistical analysis scripts, and 300 DPI publication figures.",
+  "title": "Replication Package: Every Added Test Raises the Mutation Score: A Pitfall in Evaluating Mutation Testing on Bug Fixes, and a Kill-Matrix Protocol",
+  "description": "Replication package for a methods note on evaluating mutation testing with real bug fixes. Includes the experiment harness (PIT 1.16 with the full kill matrix, Surefire-based fault detection), the raw PIT and Surefire reports for 10 bug-fix pairs from Apache Commons Lang, the per-pair results, the naive-vs-placebo analysis, the equal-size test-subset analysis, and the scripts that generate every figure, table and number of the paper from the measured data.",
   "creators": [
     {
       "name": "Mehta, Kanhaiya",
@@ -17,8 +17,9 @@
     "empirical software engineering",
     "regression testing",
     "fault detection",
-    "Vargha-Delaney",
-    "partial correlation"
+    "kill matrix",
+    "test suite size",
+    "replication"
   ],
   "upload_type": "software",
   "communities": [

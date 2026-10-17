@@ -289,3 +289,32 @@ The empirical research project and replication package are now peer-review ready
 ### Scheduled for Future Sessions
 - Review and verify camera-ready PDF build in GitHub Actions.
 - Preregistration submission for MSR / Registered Reports track.
+
+---
+
+## Day 10 — Audit, Re-measurement & Reframing as a Methods Note (2026-10-16/17)
+
+### Why
+An audit found that several reported results were not computed from data: the mutant-budget
+reduction, sensitivity retention and timing numbers were typed into scripts, the random-sampling
+baseline was simulated, `test_count` was 0 in 16 of 18 rows, the LANG-1834 base row was a copy of the
+augmented row, and absent operators were recorded as 0% killed. Several citations were wrong.
+The base-vs-augmented comparison itself cannot show that mutation score tracks bug detection,
+because T_aug is T_base plus tests.
+
+### Completed Work
+- [x] Rewrote the PIT parser (PIT's own score definition, real per-mutator counts, full kill matrix)
+      and added a Surefire parser.
+- [x] Rewrote the experiment runner: measured fault detection, real suite sizes, timings, raw-report
+      archive under `data/raw/`, results in `data/v2/`.
+- [x] Re-measured all 14 mined Commons Lang candidates: 10 pairs measured, 4 skipped (no new test
+      methods). Comparison with v1 in `docs/DATA_V1_VS_V2.md`.
+- [x] Added the equal-size test-subset analysis on the kill matrix (`scripts/subset_analysis.py`).
+- [x] Added the naive-vs-placebo pitfall analysis (`scripts/pitfall_analysis.py`).
+- [x] Retired the scripts with typed-in numbers; moved first-version documents to `docs/superseded/`.
+- [x] Scripts now write the paper's numbers and tables to `paper/generated/`; figures regenerated.
+- [x] Reframed the paper as a methods note (pitfall, kill-matrix protocol, 10-bug pilot) for ICST 2027 NIER.
+
+### Next
+- Review the rewritten paper; anonymize the artifact link for double-blind review.
+- Scale up with the mined Commons CSV and Gson candidates.

@@ -19,7 +19,7 @@ cd "${REPO_ROOT}"
 # Remove existing archive if present
 rm -f "${OUTPUT_PATH}"
 
-# Create zip archive excluding git history, virtual environments, cache, and raw logs
+# Create zip archive with the measured data (data/v2, data/raw); exclude git history, caches and superseded docs
 zip -r "${OUTPUT_PATH}" \
   README.md \
   LICENSE \
@@ -29,6 +29,8 @@ zip -r "${OUTPUT_PATH}" \
   config/ \
   data/*.json \
   data/processed_results.csv \
+  data/v2/ \
+  data/raw/ \
   docs/ \
   figures/ \
   harness/ \
@@ -38,7 +40,7 @@ zip -r "${OUTPUT_PATH}" \
   -x "*.DS_Store" \
   -x "*__pycache__*" \
   -x "*.pyc" \
-  -x "data/raw/*" \
+  -x "docs/superseded/*" \
   -x ".git/*" \
   -x ".venv/*"
 
