@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.223" tests="67" errors="1" skipped="0" failures="5" flakes="0">
+  <properties>
+    <property name="java.specification.version" value="21"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/Users/kanhaiya_mehta/mutation-testing-research/benchmarks/commons-lang/target/test-classes:/Users/kanhaiya_mehta/mutation-testing-research/benchmarks/commons-lang/target/classes:/Users/kanhaiya_mehta/.m2/repository/org/junit/jupiter/junit-jupiter/5.14.4/junit-jupiter-5.14.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.14.4/junit-jupiter-api-5.14.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/Users/kanhaiya_mehta/.m2/repository/org/junit/platform/junit-platform-commons/1.14.4/junit-platform-commons-1.14.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/kanhaiya_mehta/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.14.4/junit-jupiter-params-5.14.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.14.4/junit-jupiter-engine-5.14.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/junit/platform/junit-platform-engine/1.14.4/junit-platform-engine-1.14.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/junit-pioneer/junit-pioneer/1.9.1/junit-pioneer-1.9.1.jar:/Users/kanhaiya_mehta/.m2/repository/org/junit/platform/junit-platform-launcher/1.14.4/junit-platform-launcher-1.14.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/easymock/easymock/5.6.0/easymock-5.6.0.jar:/Users/kanhaiya_mehta/.m2/repository/net/bytebuddy/byte-buddy/1.17.5/byte-buddy-1.17.5.jar:/Users/kanhaiya_mehta/.m2/repository/org/ow2/asm/asm/9.8/asm-9.8.jar:/Users/kanhaiya_mehta/.m2/repository/org/objenesis/objenesis/3.4/objenesis-3.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/mockito/mockito-inline/4.11.0/mockito-inline-4.11.0.jar:/Users/kanhaiya_mehta/.m2/repository/org/mockito/mockito-core/4.11.0/mockito-core-4.11.0.jar:/Users/kanhaiya_mehta/.m2/repository/net/bytebuddy/byte-buddy-agent/1.12.19/byte-buddy-agent-1.12.19.jar:/Users/kanhaiya_mehta/.m2/repository/org/apache/commons/commons-text/1.15.0/commons-text-1.15.0.jar:/Users/kanhaiya_mehta/.m2/repository/org/apache/commons/commons-lang3/3.20.0/commons-lang3-3.20.0.jar:/Users/kanhaiya_mehta/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar:/Users/kanhaiya_mehta/.m2/repository/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar:/Users/kanhaiya_mehta/.m2/repository/org/openjdk/jmh/jmh-generator-annprocess/1.37/jmh-generator-annprocess-1.37.jar"/>
+    <property name="java.vm.vendor" value="Homebrew"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://github.com/Homebrew/homebrew-core/issues"/>
+    <property name="os.name" value="Mac OS X"/>
+    <property name="java.vm.specification.version" value="21"/>
+    <property name="rat.skip" value="true"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="IN"/>
+    <property name="sun.boot.library.path" value="/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib"/>
+    <property name="sun.java.command" value="/Users/kanhaiya_mehta/mutation-testing-research/benchmarks/commons-lang/target/surefire/surefirebooter-20261017053430482_3.jar /Users/kanhaiya_mehta/mutation-testing-research/benchmarks/commons-lang/target/surefire 2026-10-17T05-34-30_435-jvmRun1 surefire-20261017053430482_1tmp surefire_0-20261017053430482_2tmp"/>
+    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="test" value="org.apache.commons.lang3.reflect.MethodUtilsTest"/>
+    <property name="surefire.test.class.path" value="/Users/kanhaiya_mehta/mutation-testing-research/benchmarks/commons-lang/target/test-classes:/Users/kanhaiya_mehta/mutation-testing-research/benchmarks/commons-lang/target/classes:/Users/kanhaiya_mehta/.m2/repository/org/junit/jupiter/junit-jupiter/5.14.4/junit-jupiter-5.14.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.14.4/junit-jupiter-api-5.14.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/Users/kanhaiya_mehta/.m2/repository/org/junit/platform/junit-platform-commons/1.14.4/junit-platform-commons-1.14.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/kanhaiya_mehta/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.14.4/junit-jupiter-params-5.14.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.14.4/junit-jupiter-engine-5.14.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/junit/platform/junit-platform-engine/1.14.4/junit-platform-engine-1.14.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/junit-pioneer/junit-pioneer/1.9.1/junit-pioneer-1.9.1.jar:/Users/kanhaiya_mehta/.m2/repository/org/junit/platform/junit-platform-launcher/1.14.4/junit-platform-launcher-1.14.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/easymock/easymock/5.6.0/easymock-5.6.0.jar:/Users/kanhaiya_mehta/.m2/repository/net/bytebuddy/byte-buddy/1.17.5/byte-buddy-1.17.5.jar:/Users/kanhaiya_mehta/.m2/repository/org/ow2/asm/asm/9.8/asm-9.8.jar:/Users/kanhaiya_mehta/.m2/repository/org/objenesis/objenesis/3.4/objenesis-3.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/mockito/mockito-inline/4.11.0/mockito-inline-4.11.0.jar:/Users/kanhaiya_mehta/.m2/repository/org/mockito/mockito-core/4.11.0/mockito-core-4.11.0.jar:/Users/kanhaiya_mehta/.m2/repository/net/bytebuddy/byte-buddy-agent/1.12.19/byte-buddy-agent-1.12.19.jar:/Users/kanhaiya_mehta/.m2/repository/org/apache/commons/commons-text/1.15.0/commons-text-1.15.0.jar:/Users/kanhaiya_mehta/.m2/repository/org/apache/commons/commons-lang3/3.20.0/commons-lang3-3.20.0.jar:/Users/kanhaiya_mehta/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar:/Users/kanhaiya_mehta/.m2/repository/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar:/Users/kanhaiya_mehta/.m2/repository/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar:/Users/kanhaiya_mehta/.m2/repository/org/openjdk/jmh/jmh-generator-annprocess/1.37/jmh-generator-annprocess-1.37.jar"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/Users/kanhaiya_mehta"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2026-08-18"/>
+    <property name="java.home" value="/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/Users/kanhaiya_mehta/mutation-testing-research/benchmarks/commons-lang"/>
+    <property name="java.vm.compressedOopsMode" value="Non-zero disjoint base"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="apple.awt.application.name" value="ForkedBooter"/>
+    <property name="surefire.real.class.path" value="/Users/kanhaiya_mehta/mutation-testing-research/benchmarks/commons-lang/target/surefire/surefirebooter-20261017053430482_3.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="java.runtime.version" value="21.0.12.1"/>
+    <property name="user.name" value="kanhaiya_mehta"/>
+    <property name="stdout.encoding" value="UTF-8"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="27.0.1"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="surefire.failIfNoSpecifiedTests" value="false"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="java.vendor.version" value="Homebrew"/>
+    <property name="localRepository" value="/Users/kanhaiya_mehta/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://github.com/Homebrew/homebrew-core/issues"/>
+    <property name="java.io.tmpdir" value="/var/folders/90/qg_h672n1n9ddlffl1qqls2w0000gn/T/"/>
+    <property name="java.version" value="21.0.12.1"/>
+    <property name="user.dir" value="/Users/kanhaiya_mehta/mutation-testing-research/benchmarks/commons-lang"/>
+    <property name="os.arch" value="aarch64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="failIfNoTests" value="false"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/Users/kanhaiya_mehta/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="UTF-8"/>
+    <property name="java.vendor" value="Homebrew"/>
+    <property name="java.vm.version" value="21.0.12.1"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="java.class.version" value="65.0"/>
+  </properties>
+  <testcase name="testGetMatchingMethod" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.05"/>
+  <testcase name="testGetAccessibleInterfaceMethod(Class)[1]" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.006"/>
+  <testcase name="testGetAccessibleInterfaceMethod(Class)[2]" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetMethodObject" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testInvokeMethodIgnoresStaticInterfaceMethod" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.003">
+    <failure message="expected: &lt;null&gt; but was: &lt;public static java.lang.String org.apache.commons.lang3.reflect.MethodUtilsTest$StaticLabel.label()&gt;" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: expected: <null> but was: <public static java.lang.String org.apache.commons.lang3.reflect.MethodUtilsTest$StaticLabel.label()>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertNull.failNotNull(AssertNull.java:50)
+	at org.junit.jupiter.api.AssertNull.assertNull(AssertNull.java:35)
+	at org.junit.jupiter.api.AssertNull.assertNull(AssertNull.java:30)
+	at org.junit.jupiter.api.Assertions.assertNull(Assertions.java:279)
+	at org.apache.commons.lang3.reflect.MethodUtilsTest.testInvokeMethodIgnoresStaticInterfaceMethod(MethodUtilsTest.java:681)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+]]></failure>
+  </testcase>
+  <testcase name="testInvokeMethodForceAccessNoArgs" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetAnnotationNotSearchSupersButIgnoreAccess" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.002"/>
+  <testcase name="testVarargsOverloadingResolution" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetAccessibleInterfaceMethodFromDescription(Class)[1]" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetAccessibleInterfaceMethodFromDescription(Class)[2]" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetOverrideHierarchyIncludingInterfaces" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.008"/>
+  <testcase name="testInvokeMethodVarArgsUnboxingIntArray" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.003"/>
+  <testcase name="testInvokeMethodVarArgsUnboxingFloatArray" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testInvokeMethodOnNonPublicClass" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001">
+    <error message="class org.apache.commons.lang3.reflect.MethodUtils cannot access a member of class java.util.Collections$EmptyList (in module java.base) with modifiers &quot;public&quot;" type="java.lang.IllegalAccessException"><![CDATA[java.lang.IllegalAccessException: class org.apache.commons.lang3.reflect.MethodUtils cannot access a member of class java.util.Collections$EmptyList (in module java.base) with modifiers "public"
+	at java.base/jdk.internal.reflect.Reflection.newIllegalAccessException(Reflection.java:394)
+	at java.base/java.lang.reflect.AccessibleObject.checkAccess(AccessibleObject.java:714)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:571)
+	at org.apache.commons.lang3.reflect.MethodUtils.invokeMethod(MethodUtils.java:867)
+	at org.apache.commons.lang3.reflect.MethodUtils.invokeMethod(MethodUtils.java:965)
+	at org.apache.commons.lang3.reflect.MethodUtils.invokeMethod(MethodUtils.java:893)
+	at org.apache.commons.lang3.reflect.MethodUtilsTest.testInvokeMethodOnNonPublicClass(MethodUtilsTest.java:663)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+]]></error>
+  </testcase>
+  <testcase name="testInvokeStaticMethod" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.008"/>
+  <testcase name="testGetAccessibleMethodPublicSubOtherPackage" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetAnnotationIllegalArgumentException1" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.004"/>
+  <testcase name="testGetAnnotationIllegalArgumentException2" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.0"/>
+  <testcase name="testGetAnnotationIllegalArgumentException3" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.0"/>
+  <testcase name="testGetAccessiblePublicMethod" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.0"/>
+  <testcase name="testInvokeMethodVarArgsNotUniqueResolvable" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetMatchingAccessibleMethodOnNonPublicJdkClass" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.0">
+    <failure message="expected: &lt;java.util.List&gt; but was: &lt;java.util.Collections.EmptyList&gt;" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: expected: <java.util.List> but was: <java.util.Collections.EmptyList>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertSame.failNotSame(AssertSame.java:50)
+	at org.junit.jupiter.api.AssertSame.assertSame(AssertSame.java:35)
+	at org.junit.jupiter.api.AssertSame.assertSame(AssertSame.java:30)
+	at org.junit.jupiter.api.Assertions.assertSame(Assertions.java:2860)
+	at org.apache.commons.lang3.reflect.MethodUtilsTest.testGetMatchingAccessibleMethodOnNonPublicJdkClass(MethodUtilsTest.java:647)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+]]></failure>
+  </testcase>
+  <testcase name="testGetMethodsWithAnnotationSearchSupersButNotIgnoreAccess" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.002"/>
+  <testcase name="testGetMatchingAccessibleMethodWithNoPublicDeclaration" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testInvokeMethodVarArgsUnboxingLongArray" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetAnnotationNotSearchSupersAndNotIgnoreAccess" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testNullArgument" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetAccessibleMethodPrivateInterface" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testInvokeMethodIgnoresPrivateInterfaceMethod" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.018">
+    <failure message="expected: &lt;null&gt; but was: &lt;private java.lang.String org.apache.commons.lang3.reflect.testbed9.PrivateInterfaceLabels.label()&gt;" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: expected: <null> but was: <private java.lang.String org.apache.commons.lang3.reflect.testbed9.PrivateInterfaceLabels.label()>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertNull.failNotNull(AssertNull.java:50)
+	at org.junit.jupiter.api.AssertNull.assertNull(AssertNull.java:35)
+	at org.junit.jupiter.api.AssertNull.assertNull(AssertNull.java:30)
+	at org.junit.jupiter.api.Assertions.assertNull(Assertions.java:279)
+	at org.apache.commons.lang3.reflect.MethodUtilsTest.testInvokeMethodIgnoresPrivateInterfaceMethod(MethodUtilsTest.java:691)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+]]></failure>
+  </testcase>
+  <testcase name="testGetMethodsWithAnnotation" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.0"/>
+  <testcase name="testGetMethodsWithAnnotationIllegalArgumentException1" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetMethodsWithAnnotationIllegalArgumentException2" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetMethodsWithAnnotationIllegalArgumentException3" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testInvokeJavaVarArgsOverloadingResolution" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.004"/>
+  <testcase name="testInvokeStaticMethod1PlusVarArgs" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.002"/>
+  <testcase name="testGetAccessibleMethodInaccessible" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.0"/>
+  <testcase name="testInvokeMethodVarArgsUnboxingBooleanArray" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetAnnotationSearchSupersButNotIgnoreAccess" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetMethodsWithAnnotationNotSearchSupersAndNotIgnoreAccess" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetMatchingAccessibleMethod" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.002"/>
+  <testcase name="testGetOverrideHierarchyExcludingInterfaces" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testInvokeExactMethod" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.002"/>
+  <testcase name="testInvokeMethod" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.003"/>
+  <testcase name="testInvokeStaticMethodOnNonPublicSubclass" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetMethodsListWithAnnotation" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testInvokeMethodVarArgsUnboxingCharArray" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testInvokeMethodVarArgsUnboxingShortArray" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testDistance" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testInvokeExactStaticMethod" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testInvokeMethodForceAccessWithArgs" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.002"/>
+  <testcase name="testGetMethodsWithAnnotationSearchSupersAndIgnoreAccess" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testInvokeMethodVarArgsUnboxingDoubleArray" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.0"/>
+  <testcase name="testInvokeMethodVarArgsUnboxingByteArray" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.0"/>
+  <testcase name="testInvokeMethod1PlusVarArgs" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.002"/>
+  <testcase name="testInvokeStaticMethodVarArgsOfInterface" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testInvokeMethodVarArgsOfInterface" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetMethodsWithAnnotationNotSearchSupersButIgnoreAccess" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetMethodsListWithAnnotationNullPointerException1" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetMethodsListWithAnnotationNullPointerException2" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetMethodsListWithAnnotationNullPointerException3" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testInvokeMethod_VarArgsWithNullValues" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetAnnotationSearchSupersAndIgnoreAccess" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.0"/>
+  <testcase name="testGetMatchingAccessibleMethodOnNonPublicClass(Class)[1]" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001">
+    <failure message="expected: &lt;org.apache.commons.lang3.mutable.Mutable&gt; but was: &lt;org.apache.commons.lang3.reflect.MethodUtilsTest.TestMutable&gt;" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: expected: <org.apache.commons.lang3.mutable.Mutable> but was: <org.apache.commons.lang3.reflect.MethodUtilsTest.TestMutable>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertSame.failNotSame(AssertSame.java:50)
+	at org.junit.jupiter.api.AssertSame.assertSame(AssertSame.java:35)
+	at org.junit.jupiter.api.AssertSame.assertSame(AssertSame.java:30)
+	at org.junit.jupiter.api.Assertions.assertSame(Assertions.java:2860)
+	at org.apache.commons.lang3.reflect.MethodUtilsTest.testGetMatchingAccessibleMethodOnNonPublicClass(MethodUtilsTest.java:640)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.Optional.ifPresent(Optional.java:178)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:1024)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+]]></failure>
+  </testcase>
+  <testcase name="testGetMatchingAccessibleMethodOnNonPublicClass(Class)[2]" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001">
+    <failure message="expected: &lt;org.apache.commons.lang3.mutable.Mutable&gt; but was: &lt;org.apache.commons.lang3.reflect.MethodUtilsTest.TestMutable&gt;" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: expected: <org.apache.commons.lang3.mutable.Mutable> but was: <org.apache.commons.lang3.reflect.MethodUtilsTest.TestMutable>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertSame.failNotSame(AssertSame.java:50)
+	at org.junit.jupiter.api.AssertSame.assertSame(AssertSame.java:35)
+	at org.junit.jupiter.api.AssertSame.assertSame(AssertSame.java:30)
+	at org.junit.jupiter.api.Assertions.assertSame(Assertions.java:2860)
+	at org.apache.commons.lang3.reflect.MethodUtilsTest.testGetMatchingAccessibleMethodOnNonPublicClass(MethodUtilsTest.java:640)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.Optional.ifPresent(Optional.java:178)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:1024)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+]]></failure>
+  </testcase>
+  <testcase name="testGetAccessiblePublicMethodFromDescription" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testGetAccessibleMethodPublicSub" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+  <testcase name="testConstructor" classname="org.apache.commons.lang3.reflect.MethodUtilsTest" time="0.001"/>
+</testsuite>
