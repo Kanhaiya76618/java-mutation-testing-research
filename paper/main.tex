@@ -1,223 +1,233 @@
-\documentclass[10pt,journal,compsoc]{IEEEtran}
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
 
 \usepackage{cite}
-\usepackage{amsmath,amssymb,amsfonts}
-\usepackage{algorithmic}
+\usepackage{amsmath,amssymb}
 \usepackage{graphicx}
-\usepackage{textcomp}
-\usepackage{xcolor}
 \usepackage{booktabs}
-\usepackage{multirow}
 \usepackage{url}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
+\graphicspath{{../figures/}}
 
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=magenta,      
-    urlcolor=cyan,
-    citecolor=blue,
-}
+% Double-blind switch: \anonymoustrue for submission (ICST NIER is double-blind),
+% \anonymousfalse for the camera-ready version.
+\newif\ifanonymous
+\anonymoustrue
+
+% Every number about the study comes from these generated files; they are rewritten by
+% scripts/reproduce_all.sh from the measured data. Do not type results into this file.
+\input{generated/pitfall_numbers}
+\input{generated/subset_numbers}
+
+\newcommand{\MS}{\mathit{MS}}
+\newcommand{\COV}{\mathit{COV}}
+\newcommand{\Tbase}{T_{\mathit{base}}}
+\newcommand{\Taug}{T_{\mathit{aug}}}
 
 \begin{document}
 
-\title{Which Mutation Operators Track Real-Fault Detection? A Method-Level Isolation Protocol and Pilot Study on Apache Commons Lang}
+\title{Every Added Test Raises the Mutation Score:\\
+A Pitfall in Evaluating Mutation Testing on Bug Fixes, and a Kill-Matrix Protocol}
 
-\author{Kanhaiya~Mehta%
-\thanks{K. Mehta is an independent software engineering researcher (email: kanhaiyakumar76618@gmail.com).}
-\thanks{Replication Package: \url{https://github.com/Kanhaiya76618/java-mutation-testing-research}}
-}
+\ifanonymous
+\author{\IEEEauthorblockN{Anonymous Author(s)}}
+\else
+\author{\IEEEauthorblockN{Kanhaiya Mehta}
+\IEEEauthorblockA{Independent researcher\\
+kanhaiyakumar76618@gmail.com}}
+\fi
 
-\markboth{IEEE/ACM Software Engineering Conferences (ICSE NIER / AST / ICST),~Vol.~1, No.~1,~October~2026}%
-{Mehta: Which Mutation Operators Track Real-Fault Detection?}
+\maketitle
 
-\IEEEtitleabstractindextext{%
 \begin{abstract}
-Mutation testing is widely regarded as the gold standard for assessing test suite adequacy. However, empirical debates persist regarding whether mutation score gains reliably predict real regression fault detection once test-suite size is accounted for, and which specific operators provide actionable defect-revealing signals. In this paper, we introduce \textit{Method-Level Test Annotation Isolation}, an empirical protocol that evaluates pre-fix baseline suites and bug-detecting augmented suites under identical, 100\% green production bytecode without classpath incompatibilities or assertion contamination. We evaluate this protocol in an empirical pilot study across 9 historical regression bug-fixing pairs (18 experimental records) in Apache Commons Lang using PITest v1.16 on OpenJDK 21. 
-
-Our pilot findings demonstrate: (1) In within-subject matched-pair analysis, augmented suites exhibit strictly higher mutation scores than baseline suites in \textbf{8 of 9 bug fixes} (mean gain $\overline{\Delta MS} = +5.55\%$, Wilcoxon signed-rank $W = 36.0, p = 0.0039$), while unpaired cross-bug comparisons yield $\hat{A}_{12} = 0.685$ [95\% CI: $0.43, 0.94$] ($U = 55.5, p = 0.20$); (2) Mutator operators differ markedly in diagnostic sensitivity: \texttt{MATH} (+11.81\% differential kill rate, 100\% positive Leave-One-Bug-Out folds) and \texttt{CONDITIONALS\_BOUNDARY} (+1.85\%, 89\% positive folds) provide robust discriminatory signals, whereas \texttt{VOID\_METHOD\_CALLS} is saturated by baseline smoke tests; and (3) Selective operator pruning reduces total mutant evaluation volume by 63.4\% while retaining 91.2\% of fault-revealing score gains. We formalize sample-size power requirements ($N \approx 77$--$134$) for confirmatory multi-project scale-up.
+Bug-fix commits are an attractive source of real faults for evaluating mutation testing: the tests a fix
+adds catch the bug, so one can compare the mutation score (MS) of the suite without them ($\Tbase$) and
+with them ($\Taug$). We show that this comparison is uninformative by construction: $\Taug$ contains
+$\Tbase$, so its MS can never be lower, whatever the added tests do. On \PitfallPairs{} bug fixes in
+Apache Commons Lang, the naive comparison finds a gain in all \NaivePositivePairs{} pairs (sign test
+$p=\NaiveSignP$), yet removing the same number of random tests that reveal no bug makes the same test
+``significant'' in \PlaceboSigShare{} of \PlaceboDraws{} placebo replicates. We propose a protocol that
+avoids the pitfall: measure which tests reveal the bug, record PIT's full kill matrix, check comparisons
+against a placebo, and compare test subsets of equal size. At equal size, MS ranks bug-revealing subsets
+above the others with a median $\hat{A}_{12}$ of only \RqOneMedianMS{}, no better than coverage
+(\RqOneMedianCov{}), and the arithmetic and boundary operators that the naive analysis singled out carry
+no signal (\SelectionMedian{}). The pilot is small; its contribution is the pitfall, the placebo check, and
+an auditable protocol whose scripts generate every number in this paper.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Mutation Testing, Regression Testing, Real-Fault Detection, Empirical Software Engineering, PITest, Selective Mutation, Test Suite Quality.
-\end{IEEEkeywords}}
-
-\maketitle
-\IEEEdisplaynontitleabstractindextext
-\IEEEpeerreviewmaketitle
+mutation testing, test adequacy, real faults, empirical methodology, replication
+\end{IEEEkeywords}
 
 \section{Introduction}
-\IEEEPARstart{S}{oftware} testing research has long sought objective, automated criteria to determine whether a test suite is adequate. While code coverage metrics remain the default industrial standard, empirical studies demonstrate that high coverage is an insufficient condition for defect detection~\cite{inozemtseva2014coverage}. Mutation testing addresses this limitation by injecting synthetic syntactic faults (mutants) into source code or bytecode, evaluating whether test suites detect and kill them~\cite{coles2016pit}.
+Mutation testing measures how adequate a test suite is by the share of injected faults (mutants) that its
+tests detect~\cite{coles2016pit}. Whether a higher mutation score means better detection of real faults has
+been studied with real-fault benchmarks~\cite{just2014mutants,just2014defects4j} and remains debated: much of
+the reported correlation comes from test-suite size~\cite{papadakis2018mutation,inozemtseva2014coverage}, and
+asking for a correlation at a fixed size may itself be the wrong question~\cite{chen2020revisiting}. The
+question is again pressing as tests are generated by LLMs~\cite{zhao2026coverage} and guided by targeted
+mutants in industry~\cite{foster2025mutation}.
 
-While foundational work demonstrates that mutants are coupled to real faults~\cite{just2014mutants}, empirical and industrial investigations have raised critical caveats:
-\begin{enumerate}
-    \item \textbf{Test Suite Size Confounding:} Papadakis et al.~\cite{papadakis2018mutation} demonstrated that reported correlations between mutation score and real-fault detection are often driven by test-suite size ($SLOC_{test}$), weakening once size is controlled.
-    \item \textbf{Targeted vs. Combinatorial Mutation:} Industrial engineering reports (such as Meta's Automated Code Health tool ACH~\cite{foster2025ach}) show that modern practice favors small, targeted mutant subsets tailored to specific health concerns rather than exhaustive combinatorial mutation.
-    \item \textbf{Baseline Contamination:} Directly executing mutation tools on buggy revisions ($V_{bug}$) aborts pre-scans or yields false mutant kills due to pre-existing assertion failures, whereas rolling back full test files introduces compilation incompatibilities against updated production APIs~\cite{zhao2026revisiting}.
-\end{enumerate}
-
-To overcome these methodological challenges, this paper makes three contributions:
+Bug-fix commits look like an ideal laboratory: the developer adds a test that fails before the fix and
+passes after it. A natural design compares the mutation score of the suite without the added tests
+($\Tbase$) with that of the post-fix suite ($\Taug$) and asks whether the gain is positive across many
+fixes. Our first analysis of the pilot data reported here took exactly this route and obtained a highly
+significant result. This paper explains why such a result is meaningless and what to do instead:
 \begin{itemize}
-    \item We introduce \textbf{Method-Level Test Annotation Isolation}, an automated protocol that evaluates base and augmented test suites against identical, 100\% green production bytecode.
-    \item We report an \textbf{empirical pilot study} across 9 real-world regression bug fixes in Apache Commons Lang, reporting within-subject paired statistics and Leave-One-Bug-Out (LOBO) operator cross-validation.
-    \item We analyze \textbf{operator pruning trade-offs} and establish formal power analysis guidelines for community replication.
+\item the \emph{monotonicity pitfall} of base-vs-augmented comparisons, and a placebo check that exposes it
+on real data (Sec.~\ref{sec:pitfall});
+\item a \emph{kill-matrix protocol} that measures fault-revealing tests directly and compares equal-size test
+subsets without re-running the mutation tool (Sec.~\ref{sec:protocol});
+\item a pilot on \PitfallPairs{} Commons Lang fixes, with all data and scripts released
+(Sec.~\ref{sec:pilot}).
 \end{itemize}
 
-\section{Empirical Methodology}
-
-\subsection{Subject Mining \& Inclusion Criteria}
-We mine historical bug-fixing commits from Apache Commons Lang satisfying four inclusion criteria: (1) Issue-resolution commit message regex (\texttt{fix}, \texttt{bug}, \texttt{issue}, \texttt{defect}); (2) Concurrent modifications to production code (\texttt{src/main/java}) and unit test code (\texttt{src/test/java}); (3) Atomic change containment ($\le 10$ files modified) to isolate unit regression logic; and (4) Verified reproducibility: added test methods fail deterministically on $V_{bug}$ and pass cleanly on $V_{fix}$.
-
-\subsection{Method-Level Test Annotation Isolation}
-To guarantee that PITest executes on a 100\% green baseline without classpath contamination:
-\begin{itemize}
-    \item \textbf{Base Suite ($T_{base}$):} We parse the post-fix test suite and comment out JUnit annotations (\texttt{/* @Test */}, \texttt{/* @ParameterizedTest */}) corresponding to newly added regression test methods. The remaining suite compiles cleanly and runs green on $V_{fix}$, producing $MS_{base}$.
-    \item \textbf{Augmented Suite ($T_{aug}$):} Annotations are restored and recompiled, executing the complete suite against $V_{fix}$ to produce $MS_{aug}$.
-    \item \textbf{Differential Gain:} $\Delta MS = MS_{aug} - MS_{base}$.
-\end{itemize}
-
-\subsection{Experimental Setup}
-Bytecode mutation testing is conducted using PITest v1.16.0 under OpenJDK 21 LTS with the \texttt{STRONGER} operator group (14 operator classes).
-
-\section{Empirical Results \& Analysis}
-
-\subsection{RQ1: Predictive Power of Mutation Score Gains}
-Our pilot dataset consists of 9 matched bug pairs (18 records total). Because each bug fix generates a paired baseline ($T_{base}, FD=0$) and augmented suite ($T_{aug}, FD=1$), we analyze the data from both within-subject paired and unpaired distribution perspectives.
-
-\subsubsection{Within-Subject Matched Paired Analysis}
-Table~\ref{tab:paired_stats} reports the within-subject differences ($\Delta MS = MS_{aug} - MS_{base}$) across the 9 matched bug pairs.
-
-\begin{table}[htbp]
-\caption{Within-Subject Matched Paired Analysis ($N = 9$ Pairs)}
-\label{tab:paired_stats}
-\centering
-\begin{tabular}{lc}
-\toprule
-\textbf{Metric} & \textbf{Observed Value} \\
-\midrule
-Total Matched Bug Pairs & 9 \\
-Positive Score Gains ($MS_{aug} > MS_{base}$) & \textbf{8 of 9} (88.9\%) \\
-Neutral Differences ($MS_{aug} == MS_{base}$) & 1 of 9 (11.1\%) \\
-Negative Differences ($MS_{aug} < MS_{base}$) & \textbf{0 of 9} (0.0\%) \\
-Mean Within-Pair Gain ($\overline{\Delta MS}$) & \textbf{+5.55\%} (Median: +0.73\%) \\
-\textbf{Wilcoxon Signed-Rank Test} & $W = 36.0, \mathbf{p = 0.0039}$ \\
-\textbf{Paired Sign Test} & $\mathbf{p = 0.0039}$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-In 8 of the 9 bug fixes, adding the test method that catches the regression bug strictly increased the class mutation score. The Wilcoxon signed-rank test confirms that within-pair mutation score gains are statistically significant ($W = 36.0, p = 0.0039$).
-
-\subsubsection{Unpaired Cross-Bug Distribution Comparison}
-When treating the 18 records as independent samples across classes (81 pairwise cross-class comparisons), baseline variance across disparate classes (e.g., \texttt{StringUtils} base score 5.58\% vs. \texttt{Conversion} base score 89.23\%) widens the variance, as summarized in Table~\ref{tab:unpaired_stats}.
-
-\begin{table}[htbp]
-\caption{Unpaired Distribution Metrics (81 Cross-Group Pairs)}
-\label{tab:unpaired_stats}
-\centering
-\begin{tabular}{lccl}
-\toprule
-\textbf{Metric} & \textbf{Value} & \textbf{p-value} & \textbf{Interpretation} \\
-\midrule
-Mann-Whitney $U$ & 55.5 & 0.2002 & Unpaired rank sum \\
-Vargha-Delaney ($\hat{A}_{12}$) & \textbf{0.685} & --- & Medium effect [95\% CI: 0.43, 0.94] \\
-Cliff's Delta ($\delta$) & 0.370 & --- & Identically $2\hat{A}_{12} - 1$ \\
-Spearman Rank ($\rho$) & 0.321 & 0.1934 & Moderate rank correlation \\
-Kendall's Tau ($\tau$) & 0.270 & 0.1851 & Concordant with Mann-Whitney \\
-Partial Corr ($r_{xy \cdot z}$) & 0.324 & 0.2039 & Controlled for test count \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The point estimate $\hat{A}_{12} = 0.685$ indicates a medium effect size favoring fault-detecting suites. However, its Hanley-McNeil 95\% confidence interval spans $[0.43, 0.94]$, illustrating that unpaired cross-class comparisons in small samples cannot rule out a null effect without matched pairing.
-
-\subsection{RQ2: Mutator Operator Sensitivity \& Cross-Validation}
-To prevent circular evaluation when identifying sensitive mutators, we performed Leave-One-Bug-Out (LOBO) cross-validation across the 9 bug fixes. Table~\ref{tab:rq2_operators} shows operator score differentials and LOBO fold stability.
-
-\begin{table}[htbp]
-\caption{Mutator Operator Kill Rates and LOBO Stability}
-\label{tab:rq2_operators}
-\centering
-\begin{tabular}{lcccc}
-\toprule
-\textbf{Operator Category} & \textbf{Score ($FD=1$)} & \textbf{Score ($FD=0$)} & \textbf{$\Delta$} & \textbf{LOBO Folds} \\
-\midrule
-\textbf{Math / Arithmetic} & \textbf{59.51\%} & \textbf{47.70\%} & \textbf{+11.81\%} & \textbf{9/9 (100\%)} \\
-\textbf{Conditionals Boundary} & \textbf{49.63\%} & \textbf{47.78\%} & \textbf{+1.85\%} & \textbf{8/9 (89\%)} \\
-Negate Conditionals & 8.93\% & 8.93\% & +0.00\% & 0/9 (0\%) \\
-Void Method Calls & 60.56\% & 60.56\% & +0.00\% & 0/9 (0\%) \\
-Invert Negatives & 16.67\% & 16.67\% & +0.00\% & 0/9 (0\%) \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\texttt{MATH} operators exhibited the strongest discriminatory power (+11.81\% mean differential), remaining positive in 100\% of LOBO folds. Boundary mutators (\texttt{CONDITIONALS\_BOUNDARY}) remained positive in 89\% of folds. In contrast, \texttt{VOID\_METHOD\_CALLS} and \texttt{NEGATE\_CONDITIONALS} exhibited saturation or dormancy across the evaluation corpus.
-
-\subsection{RQ3: CI/CD Pruning Trade-offs and Baseline Comparison}
-Evaluating all 2,187 mutants in large monolithic classes (e.g., \texttt{StringUtils}) required 132.8 seconds per run. Table~\ref{tab:baselines} benchmarks selective operator pruning against uniform random sampling and standard PITest \texttt{DEFAULTS}.
-
-\begin{table}[htbp]
-\caption{Mutation Reduction Benchmark vs. Baselines}
-\label{tab:baselines}
-\centering
-\begin{tabular}{lccc}
-\toprule
-\textbf{Reduction Policy} & \textbf{Mutant Budget} & \textbf{Mean $\overline{\Delta MS}$} & \textbf{Sensitivity Retained} \\
-\midrule
-Full Suite (\texttt{STRONGER}) & 100.0\% & +5.55\% & 100.0\% (Base) \\
-\textbf{Selective (\texttt{MATH}+\texttt{BOUND})} & \textbf{36.6\%} & \textbf{+6.83\%} & \textbf{92.4\%} \\
-Random Sampling ($N=1000$) & 36.6\% & +5.58\% & 90.1\% \\
-PITest \texttt{DEFAULTS} & 68.2\% & +0.62\% & 46.2\% \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Restricting mutation analysis to \texttt{MATH} and \texttt{CONDITIONALS\_BOUNDARY}:
-\begin{itemize}
-    \item Reduced generated mutants by \textbf{63.4\%}.
-    \item Cut execution latency by \textbf{65.8\%} (from 132s to under 45s).
-    \item Retained \textbf{92.4\%} of cross-validated sensitivity in Leave-One-Bug-Out evaluation.
-\end{itemize}
-While random sampling is a strong theoretical baseline~\cite{gopinath2016limits}, selective mutation provides deterministic, reproducible CI execution without sampling variance, and substantially outperforms standard PITest \texttt{DEFAULTS} (which saturates on void calls and coarse boolean flips).
-
-\section{Threats to Validity \& Power Analysis}
-
-\subsection{Sample Size \& Power Analysis}
-While our pilot ($N=18$ records, 9 matched pairs) yields statistically significant within-pair results ($p = 0.0039$), confirmatory unpaired population-level claims require larger samples. Table~\ref{tab:noether_power} applies Noether's sample size approximation for Mann-Whitney tests ($\alpha = 0.05$ two-sided, 80\% power):
+\section{The Pitfall}\label{sec:pitfall}
+Let $M$ be the mutants of the fixed program and $K(m)$ the tests that kill mutant $m$. For a test suite $S$,
+$\MS(S) = |\{m \in M : K(m) \cap S \neq \emptyset\}|\,/\,|M|$. If $S \subseteq S'$, every mutant killed by $S$
+is killed by $S'$, so $\MS(S) \le \MS(S')$. Since $\Taug = \Tbase \cup A$ for the added tests $A$,
 \begin{equation}
-    N \approx \frac{7.85}{3 \cdot (\hat{A}_{12} - 0.5)^2}
+\Delta\MS = \MS(\Taug) - \MS(\Tbase) \ge 0 \quad \text{for every } A,
 \end{equation}
+and $\Delta\MS > 0$ as soon as $A$ kills one mutant that $\Tbase$ misses, which holds for almost any new
+test, whether it reveals the bug or not. A sign test across $n$ fixes then only counts non-zero gains: if all
+are positive, its two-sided $p$-value is $2^{1-n}$, below $0.05$ for every $n \ge 6$. The comparison is also
+confounded with size, since $\Taug$ is always the larger suite~\cite{papadakis2018mutation}. Only
+nondeterminism, such as timeouts that differ between two mutation runs, can make $\Delta\MS$ negative, and
+that is noise rather than signal.
 
-\begin{table}[htbp]
-\caption{Sample Size Requirements for Unpaired Confirmatory Tests}
-\label{tab:noether_power}
+The pitfall is easy to fall into because every step looks reasonable: the added tests do reveal the bug,
+they do raise the score, and the test is significant. What is missing is a comparison that could have come
+out the other way. Section~\ref{sec:protocol} adds two: a placebo and equal-size subsets.
+
+\section{Protocol}\label{sec:protocol}
+\subsection{Pairs and fault-revealing tests}
+We mine single-parent commits whose message mentions a fix and that change production code and add test
+methods (methods present after the fix but not before). The post-fix test classes are applied to the buggy
+version $V_{\mathit{bug}}$ and run with Surefire; the test methods that fail are the fault-revealing tests $F$.
+A compile error is not a detection: such pairs are skipped and logged. $\Tbase$ is the post-fix test class
+with the added methods disabled (only their own JUnit annotations are commented out). We require $\Tbase$ to
+be green on the fixed version without the added tests, and $\Taug$ to be green with them.
+
+\subsection{Kill matrix}
+We run PIT~\cite{coles2016pit} on the fixed version with the full mutation matrix enabled, so each mutant
+lists every test that kills it and every test that runs it without killing it. From the matrix we compute,
+for any subset $S$ of $\Taug$, the mutation score $\MS(S)$ and a coverage score $\COV(S)$: the share of mutants
+executed by at least one test in $S$. Mutants that PIT counts as detected without naming a test (timeouts and
+memory errors, at most \LeftOutMax{} per pair here) cannot be attributed and are left out. As a check, the
+matrix reproduces PIT's own killed count for $\Taug$ exactly in \MatrixExactPairs{} of \RqOnePairs{} pairs,
+and the count for $\Tbase$, measured in a separate run, within \MatrixMaxBaseDiff{} mutant.
+
+\subsection{Placebo}\label{sec:placebo}
+For each pair we remove $|A|$ random tests that do not reveal the bug from $\Taug$, \PlaceboDraws{} times, and
+compute the same $\Delta\MS$. Per pair, $p_{\mathrm{pl}}$ is the share of placebo draws whose gain is at
+least the real one. Across pairs, we apply the naive sign test to every placebo replicate (one draw per pair).
+
+\subsection{Equal-size subsets}\label{sec:subsets}
+For sizes of \SubsetSizes{} of the suite, we draw \SubsetDraws{} random subsets of exactly $k$ tests; a subset
+detects the bug if it contains a test in $F$. At each size we compute Vargha and Delaney's
+$\hat{A}_{12}$~\cite{vargha2000critique}: the chance that a random detecting subset scores higher than a random
+non-detecting one, where $0.5$ means the score says nothing beyond size. Sizes with fewer than
+\MinGroupSubsets{} subsets in either group are skipped. Per pair we report the median over sizes, and we test
+across pairs with two-sided Wilcoxon signed-rank tests. For operators, subsets are scored on the mutants of one
+operator, in pairs where it has at least \MinKillable{} mutants killed by some test.
+
+\subsection{Auditability}
+The analysis scripts write every number, table and figure of this paper from the raw PIT and Surefire reports
+(the paper only includes the generated files), so no result is typed in by hand.
+
+\section{Pilot Study}\label{sec:pilot}
+We apply the protocol to Apache Commons Lang with PIT 1.16 (\texttt{STRONGER} mutators), JUnit~5 and JDK~21;
+the test pool of a pair is its changed test classes. Of \CandidatesMined{} mined candidates,
+\CandidatesSkipped{} add no test method and are skipped, leaving \PitfallPairs{} pairs with \TotalTests{} test
+methods, \TotalAdded{} added tests and \TotalFaultRevealing{} fault-revealing ones (Table~\ref{tab:pairs}).
+
+\begin{table}[t]
+\caption{Pilot pairs. Tests: test methods of the changed test classes; Added (rev.): added test methods
+(fault-revealing among them); $\Delta$MS: naive gain in percentage points; $p_{\mathrm{pl}}$: share of placebo
+draws with at least that gain; $\hat{A}_{12}$: median over subset sizes for mutation score and coverage.}
+\label{tab:pairs}
 \centering
-\begin{tabular}{ccc}
-\toprule
-\textbf{Target True Effect ($\hat{A}_{12}$)} & \textbf{Classification} & \textbf{Total Records Needed ($N$)} \\
-\midrule
-0.685 & Pilot Estimate & $\approx 77$ \\
-0.640 & Vargha-Delaney Medium & $\approx 134$ \\
-0.600 & Small-to-Moderate & $\approx 262$ \\
-\bottomrule
-\end{tabular}
+\resizebox{\columnwidth}{!}{\input{generated/table_pairs}}
 \end{table}
 
-Our study serves as a validated experimental protocol and empirical pilot, establishing the baseline for scale-up across Defects4J 2.0.
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{pitfall_placebo.pdf}
+\caption{Naive gain $\Delta$MS of the tests each fix added (circles) and of removing the same number of random
+tests that reveal no bug (median and 5th--95th percentile of \PlaceboDraws{} draws). Labels mark
+$p_{\mathrm{pl}} < 0.05$. Symmetric log scale.}
+\label{fig:placebo}
+\end{figure}
 
-\subsection{Construct, Internal \& External Validity}
-\textbf{Construct Validity:} We controlled for test-suite size via partial rank correlation ($r_{xy \cdot z}$) following Papadakis et al.~\cite{papadakis2018mutation}, and avoided baseline contamination via method-level annotation isolation.
+\textbf{RQ1: Does the base-vs-augmented comparison tell bug-revealing tests apart?} The naive comparison finds a
+gain in all \NaivePositivePairs{} pairs (sign test $p=\NaiveSignP$). The placebo makes the same test
+significant in \PlaceboSigShare{} of the replicates (median $p=\PlaceboMedianPValue$), although the removed tests
+reveal no bug. Only in \RealBeatsPlaceboPairs{} pairs do the added tests raise the score more than 95\% of the
+placebo removals (Fig.~\ref{fig:placebo}): a random existing test often kills as many unique mutants as the
+bug-revealing one.
 
-\textbf{Internal Validity:} Bytecode execution was standardized on OpenJDK 21 LTS, eliminating ASM major version 70 reflection errors. Fixed execution timeout factors ($1.25\times$) prevented CPU throttling distortion.
+\textbf{RQ2: At equal size, does MS rank bug-detecting suites higher?} Mutation score ranks detecting subsets
+higher in \RqOneMSAbove{} of \RqOnePairs{} pairs, with a median $\hat{A}_{12}$ of \RqOneMedianMS{}
+($p=\RqOnePms$ against $0.5$). Coverage does about as well: median \RqOneMedianCov{}, above $0.5$ in
+\RqOneCovAbove{} pairs ($p=\RqOnePcov$). Mutation score beats coverage in \RqOneMSBeatsCov{} pairs, and the
+difference is not significant ($p=\RqOnePdiff$). In Table~\ref{tab:pairs}, the two highest values (Instants and
+CharRange) belong to pairs whose added tests kill many mutants that no other test kills (their large
+$\Delta$MS); for Conversion, coverage separates the subsets even better than mutation score.
 
-\textbf{External Validity:} Our pilot evaluated Apache Commons Lang, representing algorithmic and computational utility code. Generalizability to state-machine, parsing, or mock-heavy enterprise architectures represents an important avenue for future work.
+\textbf{RQ3: Which operators carry the signal?} Table~\ref{tab:ops} scores each operator separately. The
+MATH + boundary selection that the naive analysis singled out has a median $\hat{A}_{12}$ of \SelectionMedian{}
+(above $0.5$ in \SelectionAbove{} of \SelectionPairs{} pairs) while covering \SelectionShare{} of all mutants.
+The best single operator, \texttt{\BestOperator}, reaches \BestOperatorMedian{} (above $0.5$ in
+\BestOperatorAbove{} of \BestOperatorPairs{} pairs), a small effect.
 
-\section{Conclusion}
-This paper presented Method-Level Test Annotation Isolation, an empirical protocol for evaluating mutation testing without classpath or baseline contamination. In a pilot study on Apache Commons Lang, we demonstrated that mutation score gains reliably track real fault detection within matched pairs ($W = 36.0, p = 0.0039$), with arithmetic and boundary operators providing the strongest discriminatory signal. Pruning to these sensitive operators cuts execution time by over 65\% while retaining >90\% of sensitivity, offering a viable path for continuous integration.
+\begin{table}[t]
+\caption{Operators at equal suite size: pairs scored, mean share of all mutants, median $\hat{A}_{12}$, and pairs
+with $\hat{A}_{12} > 0.5$. RC: \texttt{REMOVE\_CONDITIONALS}; CB: \texttt{CONDITIONALS\_BOUNDARY}.}
+\label{tab:ops}
+\centering
+\resizebox{\columnwidth}{!}{\input{generated/table_operators}}
+\end{table}
+
+\section{Discussion and Threats to Validity}
+\textbf{Recommendations.} (1) Do not present $\MS(\Taug) - \MS(\Tbase)$ as evidence that mutation score tracks
+bug detection. (2) Report a placebo, or compare equal-size suites. (3) Decide fault detection per test method
+from test reports, not from the build outcome, which also fails on compile errors. (4) Release kill matrices,
+so that others can re-analyze without re-running the mutation tool.
+
+\textbf{Threats.} The pilot has \PitfallPairs{} pairs from one project. Per-pair $\hat{A}_{12}$ values describe
+random subsets of one test class, not a population of real suites. Operator results rest on few mutants per
+pair. Mutants detected only by timeout are excluded. The placebo removes existing tests rather than adding new
+tests that reveal no bug. These threats limit how far the pilot results generalize, but not the pitfall, which
+follows from set inclusion alone.
+
+\section{Future Plans}
+We will (i) scale up with candidates already mined from Apache Commons CSV and Gson and with
+Defects4J~\cite{just2014defects4j,laurent2022revisiting}, pre-registering the analyses; (ii) study the
+probabilistic question raised by Chen et al.~\cite{chen2020revisiting}: does adding a test that kills more
+mutants make detecting a fault more likely than adding a random test; (iii) compare selective mutation with
+random mutant sampling at an equal budget~\cite{gopinath2016limits}, with execution times measured without the
+full matrix; (iv) revisit fault revelation without assuming a clean program~\cite{chekam2017empirical}; and
+(v) apply the placebo to evaluations that add generated tests to a suite, such as LLM-generated or
+mutation-guided tests~\cite{foster2025mutation,zhao2026coverage}, where the same pitfall applies.
 
 \section*{Data Availability}
-All datasets, harnesses, reproduction scripts, and publication figures are available in our open replication package:
-\url{https://github.com/Kanhaiya76618/java-mutation-testing-research}
+\ifanonymous
+The anonymized replication package (harness, raw PIT and Surefire reports with kill matrices, results, and the
+scripts that generate this paper's numbers, tables and figures) is available at
+\url{https://anonymous.4open.science/r/TODO}.
+% TODO(author): create the anonymized mirror and replace the link before submission.
+\else
+The replication package is available at
+\url{https://github.com/Kanhaiya76618/java-mutation-testing-research}.
+\fi
+
+\section*{Acknowledgment}
+Generative AI disclosure: parts of the analysis code and of the text of this paper were drafted with an AI
+assistant (Claude~\cite{anthropic2026claude}) and an AI coding agent (Antigravity~\cite{google2025antigravity}).
+The author reviewed and edited all generated code and text, ran all analyses, and checked every reported
+number against the raw data.
+% TODO(author): make sure this statement describes your actual use of AI tools.
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
